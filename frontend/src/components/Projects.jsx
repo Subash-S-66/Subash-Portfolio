@@ -187,9 +187,9 @@ const Projects = () => {
                 </div>
 
                 {/* Project Visual */}
-                <div className="lg:col-span-1">
+                <div className="lg:col-span-1 flex flex-col">
                   <motion.div 
-                    className={`h-64 bg-gradient-to-br ${project.gradient} rounded-xl flex items-center justify-center relative overflow-hidden shadow-2xl`}
+                    className={`h-80 bg-gradient-to-br ${project.gradient} rounded-xl flex items-center justify-center relative overflow-hidden shadow-2xl`}
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
