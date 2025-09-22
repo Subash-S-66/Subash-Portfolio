@@ -83,7 +83,7 @@ const Navbar = () => {
               </motion.button>
             ))}
             <motion.a
-              href="/Subash S Resume.pdf"
+              href="https://github.com/Subash-S-66/Resume-link"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2"
@@ -141,7 +141,7 @@ const Navbar = () => {
                 </motion.button>
               ))}
               <motion.a
-                href="/Subash S Resume.pdf"
+                href="https://github.com/Subash-S-66/Resume-link"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full text-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mt-4 flex items-center justify-center space-x-2"
