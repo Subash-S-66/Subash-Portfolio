@@ -12,42 +12,42 @@ const Hero = () => {
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Vibrant gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 opacity-90"></div>
+      {/* Professional gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900"></div>
       
-      {/* Animated floating shapes */}
+      {/* Professional floating elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute top-20 left-10 w-20 h-20 bg-yellow-400 rounded-full opacity-60"
+          className="absolute top-20 left-10 w-16 h-16 bg-blue-500/20 rounded-full"
           animate={{ 
             y: [0, -20, 0],
-            rotate: [0, 180, 360]
+            opacity: [0.3, 0.7, 0.3]
           }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute top-40 right-20 w-16 h-16 bg-cyan-400 rounded-full opacity-60"
+          className="absolute top-40 right-20 w-12 h-12 bg-indigo-500/20 rounded-full"
           animate={{ 
             y: [0, 20, 0],
             x: [0, 10, 0]
           }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-40 left-20 w-12 h-12 bg-green-400 rounded-full opacity-60"
+          className="absolute bottom-40 left-20 w-8 h-8 bg-cyan-500/20 rounded-full"
           animate={{ 
             y: [0, -15, 0],
-            rotate: [0, -180, -360]
+            opacity: [0.2, 0.6, 0.2]
           }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-20 right-10 w-24 h-24 bg-orange-400 rounded-full opacity-60"
+          className="absolute bottom-20 right-10 w-20 h-20 bg-slate-500/20 rounded-full"
           animate={{ 
             y: [0, 25, 0],
             x: [0, -15, 0]
           }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
       
@@ -69,32 +69,32 @@ const Hero = () => {
             >
               <div className="flex space-x-4">
                 <motion.div
-                  className="p-3 bg-white/20 backdrop-blur-sm rounded-full"
+                  className="p-3 bg-blue-500/20 backdrop-blur-sm rounded-full border border-blue-400/30"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <Code className="w-8 h-8 text-white" />
+                  <Code className="w-8 h-8 text-blue-300" />
                 </motion.div>
                 <motion.div
-                  className="p-3 bg-white/20 backdrop-blur-sm rounded-full"
+                  className="p-3 bg-indigo-500/20 backdrop-blur-sm rounded-full border border-indigo-400/30"
                   whileHover={{ scale: 1.1, rotate: -5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <Palette className="w-8 h-8 text-white" />
+                  <Palette className="w-8 h-8 text-indigo-300" />
                 </motion.div>
                 <motion.div
-                  className="p-3 bg-white/20 backdrop-blur-sm rounded-full"
+                  className="p-3 bg-cyan-500/20 backdrop-blur-sm rounded-full border border-cyan-400/30"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <Zap className="w-8 h-8 text-white" />
+                  <Zap className="w-8 h-8 text-cyan-300" />
                 </motion.div>
                 <motion.div
-                  className="p-3 bg-white/20 backdrop-blur-sm rounded-full"
+                  className="p-3 bg-slate-500/20 backdrop-blur-sm rounded-full border border-slate-400/30"
                   whileHover={{ scale: 1.1, rotate: -5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <Sparkles className="w-8 h-8 text-white" />
+                  <Sparkles className="w-8 h-8 text-slate-300" />
                 </motion.div>
               </div>
             </motion.div>
@@ -107,7 +107,7 @@ const Hero = () => {
                 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight"
               >
                 Hi, I'm{' '}
-                <span className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
                   Subash S
                 </span>
               </motion.h1>
@@ -172,7 +172,7 @@ const Hero = () => {
             >
               <motion.button
                 onClick={scrollToAbout}
-                className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center justify-center"
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-full font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center justify-center"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -180,7 +180,7 @@ const Hero = () => {
               </motion.button>
               <motion.a
                 href="#projects"
-                className="border-2 border-white/50 text-white px-8 py-4 rounded-full font-semibold hover:bg-white/20 hover:border-white transition-all duration-300 backdrop-blur-sm inline-flex items-center justify-center"
+                className="border-2 border-blue-400/50 text-white px-8 py-4 rounded-full font-semibold hover:bg-blue-500/20 hover:border-blue-400 transition-all duration-300 backdrop-blur-sm inline-flex items-center justify-center"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -199,7 +199,7 @@ const Hero = () => {
                 href="https://github.com/Subash-S-66"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full transition-all duration-200"
+                className="p-3 bg-blue-500/20 backdrop-blur-sm hover:bg-blue-500/30 text-blue-300 rounded-full transition-all duration-200 border border-blue-400/30"
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -209,7 +209,7 @@ const Hero = () => {
                 href="https://www.linkedin.com/in/subash-s-514aa9373"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full transition-all duration-200"
+                className="p-3 bg-indigo-500/20 backdrop-blur-sm hover:bg-indigo-500/30 text-indigo-300 rounded-full transition-all duration-200 border border-indigo-400/30"
                 whileHover={{ scale: 1.1, rotate: -5 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -226,16 +226,16 @@ const Hero = () => {
             className="flex justify-center lg:justify-end"
           >
             <div className="relative">
-              <div className="w-80 h-80 bg-gradient-to-br from-yellow-400 via-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl">
-                <div className="w-72 h-72 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center">
-                  <div className="w-64 h-64 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+              <div className="w-80 h-80 bg-gradient-to-br from-slate-800 via-blue-800 to-indigo-800 rounded-full flex items-center justify-center shadow-2xl border border-blue-500/20">
+                <div className="w-72 h-72 bg-gradient-to-br from-blue-700 to-indigo-700 rounded-full flex items-center justify-center border border-blue-400/30">
+                  <div className="w-64 h-64 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-full flex items-center justify-center border border-cyan-400/30">
                     <span className="text-6xl font-bold text-white">SS</span>
                   </div>
                 </div>
               </div>
               {/* Floating elements */}
               <motion.div 
-                className="absolute -top-4 -right-4 w-8 h-8 bg-yellow-400 rounded-full"
+                className="absolute -top-4 -right-4 w-8 h-8 bg-blue-500/40 rounded-full border border-blue-400/50"
                 animate={{ 
                   y: [0, -10, 0],
                   rotate: [0, 180, 360]
@@ -243,7 +243,7 @@ const Hero = () => {
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               />
               <motion.div 
-                className="absolute -bottom-4 -left-4 w-6 h-6 bg-cyan-400 rounded-full"
+                className="absolute -bottom-4 -left-4 w-6 h-6 bg-cyan-500/40 rounded-full border border-cyan-400/50"
                 animate={{ 
                   y: [0, 10, 0],
                   scale: [1, 1.2, 1]
@@ -251,7 +251,7 @@ const Hero = () => {
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               />
               <motion.div 
-                className="absolute top-1/2 -left-8 w-4 h-4 bg-green-400 rounded-full"
+                className="absolute top-1/2 -left-8 w-4 h-4 bg-indigo-500/40 rounded-full border border-indigo-400/50"
                 animate={{ 
                   x: [0, 10, 0],
                   rotate: [0, -180, -360]
@@ -272,7 +272,7 @@ const Hero = () => {
       >
         <motion.button
           onClick={scrollToAbout}
-          className="flex flex-col items-center space-y-2 text-white/80 hover:text-white transition-colors duration-200 p-2 bg-white/20 backdrop-blur-sm rounded-full"
+          className="flex flex-col items-center space-y-2 text-blue-300 hover:text-white transition-colors duration-200 p-2 bg-blue-500/20 backdrop-blur-sm rounded-full border border-blue-400/30"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >

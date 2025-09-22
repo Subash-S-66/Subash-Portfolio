@@ -15,11 +15,11 @@ const Navbar = () => {
   }, [])
 
   const navItems = [
-    { name: 'Home', href: '#home', color: 'from-purple-500 to-pink-500' },
-    { name: 'About', href: '#about', color: 'from-blue-500 to-cyan-500' },
-    { name: 'Projects', href: '#projects', color: 'from-green-500 to-emerald-500' },
-    { name: 'Skills', href: '#skills', color: 'from-orange-500 to-red-500' },
-    { name: 'Contact', href: '#contact', color: 'from-indigo-500 to-purple-500' },
+    { name: 'Home', href: '#home', color: 'from-blue-500 to-indigo-500' },
+    { name: 'About', href: '#about', color: 'from-slate-500 to-blue-500' },
+    { name: 'Projects', href: '#projects', color: 'from-cyan-500 to-blue-500' },
+    { name: 'Skills', href: '#skills', color: 'from-indigo-500 to-purple-500' },
+    { name: 'Contact', href: '#contact', color: 'from-blue-600 to-indigo-600' },
   ]
 
   const scrollToSection = (href) => {
@@ -51,9 +51,9 @@ const Navbar = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 4, repeat: Infinity }}
             >
-              <Code2 className="h-8 w-8 text-purple-600" />
+              <Code2 className="h-8 w-8 text-blue-500" />
             </motion.div>
-            <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
               Subash S
             </span>
           </motion.div>
@@ -72,7 +72,7 @@ const Navbar = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <span className="relative z-10 flex items-center">
-                  <Star className="h-4 w-4 mr-1 text-transparent bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text" />
+                  <Star className="h-4 w-4 mr-1 text-transparent bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text" />
                   {item.name}
                 </span>
                 <motion.div
@@ -86,7 +86,7 @@ const Navbar = () => {
               href="/Subash S Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2"
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, scale: 0 }}
@@ -102,7 +102,7 @@ const Navbar = () => {
           <div className="md:hidden">
             <motion.button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-600 hover:text-purple-600 transition-colors duration-200 p-2 rounded-lg hover:bg-purple-50"
+              className="text-gray-600 hover:text-blue-600 transition-colors duration-200 p-2 rounded-lg hover:bg-blue-50"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
@@ -131,7 +131,7 @@ const Navbar = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
-                  <Star className="h-4 w-4 text-transparent bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text" />
+                  <Star className="h-4 w-4 text-transparent bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text" />
                   <span className="relative z-10">{item.name}</span>
                   <motion.div
                     className={`absolute inset-0 bg-gradient-to-r ${item.color} opacity-0 group-hover:opacity-100 rounded-xl`}
@@ -144,7 +144,7 @@ const Navbar = () => {
                 href="/Subash S Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full text-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mt-4 flex items-center justify-center space-x-2"
+                className="block w-full text-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mt-4 flex items-center justify-center space-x-2"
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 initial={{ opacity: 0, y: 20 }}

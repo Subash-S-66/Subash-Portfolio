@@ -38,20 +38,53 @@ const Contact = () => {
     })
   }
 
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      setSubmitStatus('error')
+      return false
+    }
+    if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email)) {
+      setSubmitStatus('error')
+      return false
+    }
+    if (!formData.subject.trim()) {
+      setSubmitStatus('error')
+      return false
+    }
+    if (!formData.message.trim()) {
+      setSubmitStatus('error')
+      return false
+    }
+    return true
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    if (!validateForm()) {
+      setTimeout(() => setSubmitStatus(null), 3000)
+      return
+    }
+    
     setIsSubmitting(true)
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
       
-      // Here you would typically send the data to your backend
-      console.log('Form submitted:', formData)
-      
-      setSubmitStatus('success')
-      setFormData({ name: '', email: '', subject: '', message: '' })
+      if (response.ok) {
+        setSubmitStatus('success')
+        setFormData({ name: '', email: '', subject: '', message: '' })
+      } else {
+        throw new Error('Failed to send message')
+      }
     } catch (error) {
+      console.error('Error sending message:', error)
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
