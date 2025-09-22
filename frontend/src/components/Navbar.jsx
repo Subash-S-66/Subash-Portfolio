@@ -80,7 +80,7 @@ const Navbar = () => {
               href="https://github.com/Subash-S-66/Resume-link/blob/main/Subash%20S%20Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className={`${scrolled ? 'bg-blue-600 hover:bg-blue-700' : 'bg-white/10 hover:bg-white/30 text-white border border-white/30'} text-white px-6 py-2 rounded-md font-medium transition-colors duration-200 flex items-center space-x-2 shadow-sm hover:shadow-md`}
+              className={`${scrolled ? 'bg-blue-600 hover:bg-blue-700' : 'bg-white/10 hover:bg-white/30 text-white border border-white/30'} text-white px-6 py-2 rounded-full font-medium transition-colors duration-200 flex items-center space-x-2 shadow-sm hover:shadow-md`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               initial={{ opacity: 0, scale: 0 }}
@@ -133,7 +133,7 @@ const Navbar = () => {
                 href="https://github.com/Subash-S-66/Resume-link/blob/main/Subash%20S%20Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition-colors duration-200 mt-4 flex items-center justify-center space-x-2 shadow-sm"
+                className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-medium transition-colors duration-200 mt-4 flex items-center justify-center space-x-2 shadow-sm"
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
                 initial={{ opacity: 0, y: 20 }}

@@ -352,7 +352,7 @@ const Hero = () => {
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
         >
-          <span className="text-xs sm:text-sm font-semibold text-white group-hover:text-white leading-tight text-center">Explore More</span>
+          <span className="text-xs sm:text-sm font-semibold text-white group-hover:text-white leading-tight text-center">Scroll Down</span>
           <motion.div
             animate={{ y: [0, 4, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
