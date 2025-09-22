@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://subash-s-66.github.io/subash-portfolio",
+  "homepage": "https://subash-s-66.github.io/portfolio",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -14,7 +14,8 @@
     "test": "node scripts/test.js",
     "setup": "node scripts/setup.js",
     "deploy": "gh-pages -d dist",
-    "deploy:github": "node scripts/deploy-github.js"
+    "deploy:github": "node scripts/deploy-github.js",
+    "deploy:manual": "node scripts/deploy-manual.js"
   },
   "dependencies": {
     "framer-motion": "^10.16.4",
