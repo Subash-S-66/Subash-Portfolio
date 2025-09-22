@@ -348,7 +348,7 @@ const Hero = () => {
       >
         <motion.button
           onClick={scrollToAbout}
-          className="group flex flex-col items-center justify-center space-y-1 w-28 h-14 sm:w-32 sm:h-16 bg-white/15 backdrop-blur-md rounded-full border border-white/30 hover:border-white/50 hover:bg-white/25 transition-all duration-300 cursor-pointer px-4 py-3 shadow-lg"
+          className="group flex flex-col items-center justify-center space-y-1 w-26 h-12 sm:w-30 sm:h-14 bg-white/15 backdrop-blur-md rounded-full border border-white/30 hover:border-white/50 hover:bg-white/25 transition-all duration-300 cursor-pointer px-4 py-3 shadow-lg"
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
         >
