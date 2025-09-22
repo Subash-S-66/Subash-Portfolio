@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { ChevronDown, Github, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
+import { ChevronDown, Github, Linkedin, Mail, Phone, MapPin, Code, Palette, Zap, Sparkles } from 'lucide-react'
 
 const Hero = () => {
   const scrollToAbout = () => {
@@ -12,9 +12,44 @@ const Hero = () => {
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50"></div>
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%230ea5e9%22%20fill-opacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
+      {/* Vibrant gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 opacity-90"></div>
+      
+      {/* Animated floating shapes */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div
+          className="absolute top-20 left-10 w-20 h-20 bg-yellow-400 rounded-full opacity-60"
+          animate={{ 
+            y: [0, -20, 0],
+            rotate: [0, 180, 360]
+          }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute top-40 right-20 w-16 h-16 bg-cyan-400 rounded-full opacity-60"
+          animate={{ 
+            y: [0, 20, 0],
+            x: [0, 10, 0]
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-40 left-20 w-12 h-12 bg-green-400 rounded-full opacity-60"
+          animate={{ 
+            y: [0, -15, 0],
+            rotate: [0, -180, -360]
+          }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-10 w-24 h-24 bg-orange-400 rounded-full opacity-60"
+          animate={{ 
+            y: [0, 25, 0],
+            x: [0, -15, 0]
+          }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
       
       <div className="container-custom section-padding relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -25,22 +60,63 @@ const Hero = () => {
             transition={{ duration: 0.8 }}
             className="space-y-8"
           >
+            {/* Icon showcase */}
+            <motion.div
+              className="flex justify-center lg:justify-start mb-6"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+            >
+              <div className="flex space-x-4">
+                <motion.div
+                  className="p-3 bg-white/20 backdrop-blur-sm rounded-full"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Code className="w-8 h-8 text-white" />
+                </motion.div>
+                <motion.div
+                  className="p-3 bg-white/20 backdrop-blur-sm rounded-full"
+                  whileHover={{ scale: 1.1, rotate: -5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Palette className="w-8 h-8 text-white" />
+                </motion.div>
+                <motion.div
+                  className="p-3 bg-white/20 backdrop-blur-sm rounded-full"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Zap className="w-8 h-8 text-white" />
+                </motion.div>
+                <motion.div
+                  className="p-3 bg-white/20 backdrop-blur-sm rounded-full"
+                  whileHover={{ scale: 1.1, rotate: -5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Sparkles className="w-8 h-8 text-white" />
+                </motion.div>
+              </div>
+            </motion.div>
+
             <div className="space-y-4">
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-800 leading-tight"
+                className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight"
               >
                 Hi, I'm{' '}
-                <span className="gradient-text">Subash S</span>
+                <span className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+                  Subash S
+                </span>
               </motion.h1>
               
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-xl md:text-2xl text-secondary-600 font-medium"
+                className="text-xl md:text-2xl text-white/90 font-medium"
               >
                 B.Tech Computer Science Student
               </motion.p>
@@ -49,7 +125,7 @@ const Hero = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
-                className="text-lg text-secondary-500"
+                className="text-lg text-white/80"
               >
                 Full Stack Developer using MERN Stack
               </motion.p>
@@ -59,7 +135,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
-              className="text-lg text-secondary-600 leading-relaxed max-w-lg"
+              className="text-lg text-white/80 leading-relaxed max-w-lg"
             >
               Computer Science Engineering student with practical experience in full-stack web development, 
               focusing on the MERN stack. Currently doing an internship at Postulate Info Tech, 
@@ -73,16 +149,16 @@ const Hero = () => {
               transition={{ duration: 0.8, delay: 1.0 }}
               className="space-y-3"
             >
-              <div className="flex items-center space-x-3 text-secondary-600">
-                <Phone className="h-5 w-5 text-primary-600" />
+              <div className="flex items-center space-x-3 text-white/90">
+                <Phone className="h-5 w-5 text-yellow-400" />
                 <span>+91-9345081127</span>
               </div>
-              <div className="flex items-center space-x-3 text-secondary-600">
-                <Mail className="h-5 w-5 text-primary-600" />
+              <div className="flex items-center space-x-3 text-white/90">
+                <Mail className="h-5 w-5 text-pink-400" />
                 <span>subash.93450@gmail.com</span>
               </div>
-              <div className="flex items-center space-x-3 text-secondary-600">
-                <MapPin className="h-5 w-5 text-primary-600" />
+              <div className="flex items-center space-x-3 text-white/90">
+                <MapPin className="h-5 w-5 text-purple-400" />
                 <span>Chennai, India</span>
               </div>
             </motion.div>
@@ -94,18 +170,22 @@ const Hero = () => {
               transition={{ duration: 0.8, delay: 1.2 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <button
+              <motion.button
                 onClick={scrollToAbout}
-                className="btn-primary inline-flex items-center justify-center"
+                className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center justify-center"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 Learn More About Me
-              </button>
-              <a
+              </motion.button>
+              <motion.a
                 href="#projects"
-                className="btn-outline inline-flex items-center justify-center"
+                className="border-2 border-white/50 text-white px-8 py-4 rounded-full font-semibold hover:bg-white/20 hover:border-white transition-all duration-300 backdrop-blur-sm inline-flex items-center justify-center"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 View My Work
-              </a>
+              </motion.a>
             </motion.div>
 
             {/* Social Links */}
@@ -115,22 +195,26 @@ const Hero = () => {
               transition={{ duration: 0.8, delay: 1.4 }}
               className="flex space-x-4"
             >
-              <a
+              <motion.a
                 href="https://github.com/Subash-S-66"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-secondary-100 hover:bg-primary-100 text-secondary-600 hover:text-primary-600 rounded-lg transition-all duration-200"
+                className="p-3 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full transition-all duration-200"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <Github className="h-6 w-6" />
-              </a>
-              <a
+              </motion.a>
+              <motion.a
                 href="https://www.linkedin.com/in/subash-s-514aa9373"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-secondary-100 hover:bg-primary-100 text-secondary-600 hover:text-primary-600 rounded-lg transition-all duration-200"
+                className="p-3 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full transition-all duration-200"
+                whileHover={{ scale: 1.1, rotate: -5 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <Linkedin className="h-6 w-6" />
-              </a>
+              </motion.a>
             </motion.div>
           </motion.div>
 
@@ -142,16 +226,38 @@ const Hero = () => {
             className="flex justify-center lg:justify-end"
           >
             <div className="relative">
-              <div className="w-80 h-80 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full flex items-center justify-center shadow-2xl">
-                <div className="w-72 h-72 bg-gradient-to-br from-primary-200 to-primary-300 rounded-full flex items-center justify-center">
-                  <div className="w-64 h-64 bg-gradient-to-br from-primary-300 to-primary-400 rounded-full flex items-center justify-center">
+              <div className="w-80 h-80 bg-gradient-to-br from-yellow-400 via-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl">
+                <div className="w-72 h-72 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center">
+                  <div className="w-64 h-64 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
                     <span className="text-6xl font-bold text-white">SS</span>
                   </div>
                 </div>
               </div>
               {/* Floating elements */}
-              <div className="absolute -top-4 -right-4 w-8 h-8 bg-primary-500 rounded-full animate-bounce-slow"></div>
-              <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-secondary-400 rounded-full animate-pulse-slow"></div>
+              <motion.div 
+                className="absolute -top-4 -right-4 w-8 h-8 bg-yellow-400 rounded-full"
+                animate={{ 
+                  y: [0, -10, 0],
+                  rotate: [0, 180, 360]
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div 
+                className="absolute -bottom-4 -left-4 w-6 h-6 bg-cyan-400 rounded-full"
+                animate={{ 
+                  y: [0, 10, 0],
+                  scale: [1, 1.2, 1]
+                }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div 
+                className="absolute top-1/2 -left-8 w-4 h-4 bg-green-400 rounded-full"
+                animate={{ 
+                  x: [0, 10, 0],
+                  rotate: [0, -180, -360]
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              />
             </div>
           </motion.div>
         </div>
@@ -164,13 +270,20 @@ const Hero = () => {
         transition={{ duration: 0.8, delay: 1.6 }}
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
       >
-        <button
+        <motion.button
           onClick={scrollToAbout}
-          className="flex flex-col items-center space-y-2 text-secondary-400 hover:text-primary-600 transition-colors duration-200"
+          className="flex flex-col items-center space-y-2 text-white/80 hover:text-white transition-colors duration-200 p-2 bg-white/20 backdrop-blur-sm rounded-full"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
         >
           <span className="text-sm font-medium">Scroll Down</span>
-          <ChevronDown className="h-6 w-6 animate-bounce" />
-        </button>
+          <motion.div
+            animate={{ y: [0, 5, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <ChevronDown className="h-6 w-6" />
+          </motion.div>
+        </motion.button>
       </motion.div>
     </section>
   )
