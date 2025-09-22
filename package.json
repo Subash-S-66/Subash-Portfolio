@@ -1,42 +1,49 @@
 {
-  "name": "subash-portfolio",
+  "name": "subash-portfolio-monorepo",
+  "version": "1.0.0",
+  "description": "Full-stack portfolio website with React frontend and Express backend",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "homepage": "https://subash-s-66.github.io/portfolio",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "server": "cd server && npm run dev",
-    "dev:full": "concurrently \"npm run dev\" \"npm run server\"",
-    "test": "node scripts/test.js",
-    "setup": "node scripts/setup.js",
-    "deploy": "gh-pages -d dist",
-    "deploy:github": "node scripts/deploy-github.js",
-    "deploy:manual": "node scripts/deploy-manual.js"
+    "dev": "npx vite",
+    "build": "npx vite build",
+    "preview": "npx vite preview",
+    "server": "cd backend && nodemon server.js",
+    "start": "cd backend && node server.js",
+    "dev:full": "concurrently \"npm run dev\" \"npm run server\""
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1",
     "framer-motion": "^10.16.4",
+    "helmet": "^7.1.0",
     "lucide-react": "^0.294.0",
+    "nodemailer": "^6.9.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^9.5.2"
   },
   "devDependencies": {
-    "@types/react": "^18.2.43",
-    "@types/react-dom": "^18.2.17",
-    "@vitejs/plugin-react": "^4.2.1",
+    "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.16",
     "concurrently": "^8.2.2",
-    "eslint": "^8.55.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5",
-    "gh-pages": "^6.3.0",
+    "nodemon": "^3.0.2",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.6",
-    "vite": "^5.0.8"
-  }
+    "terser": "^5.44.0",
+    "vite": "^5.4.20"
+  },
+  "keywords": [
+    "portfolio",
+    "react",
+    "express",
+    "fullstack",
+    "monorepo"
+  ],
+  "author": "Subash S",
+  "license": "MIT"
 }

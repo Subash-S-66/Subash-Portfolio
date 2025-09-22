@@ -1,251 +1,108 @@
-# Subash S - Portfolio Website
+# Subash S - Portfolio Monorepo
 
-A modern, responsive portfolio website built with React, Vite, Tailwind CSS, and Express.js. This portfolio showcases my skills, projects, and experience as a Full Stack Developer.
+A modern, professional portfolio website showcasing my journey as a Full Stack Developer. This monorepo contains both the React frontend and Express backend.
 
-## 🚀 Features
+## 🏗️ Project Structure
 
-- **Modern Design**: Clean, professional design with smooth animations
-- **Responsive**: Fully responsive across all devices
-- **Interactive**: Smooth scrolling, hover effects, and animations
-- **Contact Form**: Functional contact form with email integration
-- **Project Showcase**: Detailed project descriptions with tech stacks
-- **Skills Visualization**: Interactive skill bars and categories
-- **SEO Optimized**: Meta tags and semantic HTML structure
+```
+portfolio/
+├── frontend/          # React + Vite frontend
+│   ├── src/          # React components and pages
+│   └── public/       # Static assets
+├── backend/          # Express.js backend
+│   ├── server.js     # Main server file
+│   └── env.example   # Environment variables template
+├── node_modules/     # Shared dependencies (unified)
+├── index.html        # Main HTML file
+├── vite.config.js    # Vite configuration
+├── tailwind.config.js # Tailwind configuration
+├── postcss.config.js # PostCSS configuration
+└── package.json      # ALL dependencies and scripts
+```
+
+## 🚀 Quick Start
+
+### Install Dependencies
+```bash
+# Install all dependencies (unified)
+npm install
+
+# All dependencies are managed in the root package.json
+```
+
+### Development
+```bash
+# Run frontend only
+npm run dev
+
+# Run backend only
+npm run server
+
+# Run both frontend and backend
+npm run dev:full
+```
+
+### Production
+```bash
+# Build frontend
+npm run build
+
+# Start backend server
+npm run start
+```
+
+## 📦 Frontend (React + Vite)
+
+- **Framework**: React 18 with Vite
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Deployment**: GitHub Pages
+
+## 🔧 Backend (Express.js)
+
+- **Framework**: Express.js
+- **Email**: Nodemailer with Gmail SMTP
+- **Security**: Helmet, CORS, Rate Limiting
+- **Validation**: Express Validator
+- **Environment**: dotenv
+
+## 🌐 Live Demo
+
+**Frontend**: [https://subash-s-66.github.io/portfolio](https://subash-s-66.github.io/portfolio)
+
+## 👨‍💻 About Me
+
+I'm a passionate B.Tech Computer Science student with 1+ years of hands-on experience in full-stack web development. My journey in programming spans across JavaScript, Python, and Java, with a strong focus on creating modern, responsive web applications.
+
+**Key Highlights:**
+- 🎓 **B.Tech Computer Science** student with strong academic foundation
+- 💻 **1+ years** of practical development experience
+- 🚀 **5+ projects** completed showcasing diverse technical skills
+- 🌐 **Full-stack expertise** in MERN stack development
+- 📍 **Based in Chennai, India** - Open to remote opportunities
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18** - UI library
-- **Vite** - Build tool and dev server
-- **Tailwind CSS** - Utility-first CSS framework
-- **Framer Motion** - Animation library
-- **React Router** - Client-side routing
-- **Lucide React** - Icon library
+- React 18, Vite, Tailwind CSS
+- Framer Motion, Lucide React
+- React Intersection Observer
 
 ### Backend
-- **Express.js** - Web framework
-- **Nodemailer** - Email service
-- **CORS** - Cross-origin resource sharing
-- **Helmet** - Security middleware
-- **Express Rate Limit** - Rate limiting
-- **Express Validator** - Input validation
+- Node.js, Express.js
+- Nodemailer, CORS, Helmet
+- Express Rate Limit, Express Validator
 
-## 📦 Installation
-
-### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
-
-### Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd subash-portfolio
-   ```
-
-2. **Install frontend dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Install backend dependencies**
-   ```bash
-   cd server
-   npm install
-   cd ..
-   ```
-
-4. **Environment Setup**
-   ```bash
-   # Copy the example environment file
-   cp server/env.example server/.env
-   
-   # Edit the .env file with your email credentials
-   # For Gmail:
-   # 1. Enable 2-factor authentication
-   # 2. Generate an App Password
-   # 3. Use the App Password as EMAIL_PASS
-   ```
-
-## 🚀 Running the Application
-
-### Development Mode
-
-1. **Start both frontend and backend simultaneously**
-   ```bash
-   npm run dev:full
-   ```
-
-   Or start them separately:
-
-2. **Start the frontend (Terminal 1)**
-   ```bash
-   npm run dev
-   ```
-
-3. **Start the backend (Terminal 2)**
-   ```bash
-   npm run server
-   ```
-
-### Production Mode
-
-1. **Build the frontend**
-   ```bash
-   npm run build
-   ```
-
-2. **Start the backend**
-   ```bash
-   cd server
-   npm start
-   ```
-
-## 🌐 Access the Application
-
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000
-- **API Health Check**: http://localhost:5000/api/health
-
-## 📁 Project Structure
-
-```
-subash-portfolio/
-├── public/
-│   └── vite.svg
-├── src/
-│   ├── components/
-│   │   ├── Navbar.jsx
-│   │   ├── Hero.jsx
-│   │   ├── About.jsx
-│   │   ├── Projects.jsx
-│   │   ├── Skills.jsx
-│   │   ├── Contact.jsx
-│   │   └── Footer.jsx
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-├── server/
-│   ├── server.js
-│   ├── package.json
-│   └── env.example
-├── package.json
-├── tailwind.config.js
-├── vite.config.js
-└── README.md
-```
-
-## 🎨 Customization
-
-### Colors
-Edit `tailwind.config.js` to customize the color scheme:
-
-```javascript
-theme: {
-  extend: {
-    colors: {
-      primary: {
-        // Your primary colors
-      },
-      secondary: {
-        // Your secondary colors
-      }
-    }
-  }
-}
-```
-
-### Content
-Update the content in each component file:
-- **Personal Info**: `src/components/Hero.jsx` and `src/components/About.jsx`
-- **Projects**: `src/components/Projects.jsx`
-- **Skills**: `src/components/Skills.jsx`
-- **Contact Info**: `src/components/Contact.jsx` and `src/components/Footer.jsx`
-
-### Styling
-Modify `src/index.css` for global styles and custom CSS classes.
-
-## 📧 Contact Form Setup
-
-The contact form is fully functional and includes:
-
-- **Input Validation**: Client and server-side validation
-- **Rate Limiting**: Prevents spam submissions
-- **Email Integration**: Sends emails using Nodemailer
-- **Auto-reply**: Sends confirmation email to users
-- **Error Handling**: Graceful error handling and user feedback
-
-### Email Configuration
-
-1. Set up your email credentials in `server/.env`
-2. For Gmail:
-   - Enable 2-factor authentication
-   - Generate an App Password
-   - Use the App Password as `EMAIL_PASS`
-
-## 🚀 Deployment
-
-### Frontend (Vercel/Netlify)
-1. Build the project: `npm run build`
-2. Deploy the `dist` folder to your hosting service
-
-### Backend (Railway/Heroku/DigitalOcean)
-1. Set environment variables
-2. Deploy the `server` folder
-3. Update `CLIENT_URL` in production
-
-## 📱 Features Overview
-
-### Hero Section
-- Animated introduction
-- Contact information
-- Social media links
-- Call-to-action buttons
-
-### About Section
-- Personal summary
-- Education details
-- Skills overview
-- Language proficiency
-
-### Projects Section
-- Detailed project descriptions
-- Tech stack visualization
-- Live demo and code links
-- Responsive project cards
-
-### Skills Section
-- Interactive skill bars
-- Categorized skills
-- Proficiency levels
-- Visual icons
-
-### Contact Section
-- Functional contact form
-- Contact information
-- Social media links
-- Form validation
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+### Database
+- MySQL, MongoDB, PostgreSQL
 
 ## 📄 License
 
-This project is licensed under the MIT License.
-
-## 👨‍💻 Author
-
-**Subash S**
-- Email: subash.93450@gmail.com
-- GitHub: [@Subash-S-66](https://github.com/Subash-S-66)
-- LinkedIn: [Subash S](https://www.linkedin.com/in/subash-s-514aa9373)
+MIT License - see LICENSE file for details
 
 ---
 
-⭐ If you like this portfolio, please give it a star!
+**Contact**: subash.93450@gmail.com  
+**GitHub**: [@Subash-S-66](https://github.com/Subash-S-66)  
+**LinkedIn**: [Subash S](https://www.linkedin.com/in/subash-s-514aa9373)
