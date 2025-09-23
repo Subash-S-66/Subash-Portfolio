@@ -1,108 +1,34 @@
-# Subash S - Portfolio Monorepo
+# Subash S - Portfolio
 
-A modern, professional portfolio website showcasing my journey as a Full Stack Developer. This monorepo contains both the React frontend and Express backend.
-
-## 🏗️ Project Structure
-
-```
-portfolio/
-├── frontend/          # React + Vite frontend
-│   ├── src/          # React components and pages
-│   └── public/       # Static assets
-├── backend/          # Express.js backend
-│   ├── server.js     # Main server file
-│   └── env.example   # Environment variables template
-├── node_modules/     # Shared dependencies (unified)
-├── index.html        # Main HTML file
-├── vite.config.js    # Vite configuration
-├── tailwind.config.js # Tailwind configuration
-├── postcss.config.js # PostCSS configuration
-└── package.json      # ALL dependencies and scripts
-```
-
-## 🚀 Quick Start
-
-### Install Dependencies
-```bash
-# Install all dependencies (unified)
-npm install
-
-# All dependencies are managed in the root package.json
-```
-
-### Development
-```bash
-# Run frontend only
-npm run dev
-
-# Run backend only
-npm run server
-
-# Run both frontend and backend
-npm run dev:full
-```
-
-### Production
-```bash
-# Build frontend
-npm run build
-
-# Start backend server
-npm run start
-```
-
-## 📦 Frontend (React + Vite)
-
-- **Framework**: React 18 with Vite
-- **Styling**: Tailwind CSS
-- **Animations**: Framer Motion
-- **Icons**: Lucide React
-- **Deployment**: GitHub Pages
-
-## 🔧 Backend (Express.js)
-
-- **Framework**: Express.js
-- **Email**: Nodemailer with Gmail SMTP
-- **Security**: Helmet, CORS, Rate Limiting
-- **Validation**: Express Validator
-- **Environment**: dotenv
+## 👋 About
+This is my personal portfolio website showcasing my full-stack development skills and projects.
 
 ## 🌐 Live Demo
-
-**Frontend**: [https://subash-s-66.github.io/portfolio](https://subash-s-66.github.io/portfolio)
-
-## 👨‍💻 About Me
-
-I'm a passionate B.Tech Computer Science student with 1+ years of hands-on experience in full-stack web development. My journey in programming spans across JavaScript, Python, and Java, with a strong focus on creating modern, responsive web applications.
-
-**Key Highlights:**
-- 🎓 **B.Tech Computer Science** student with strong academic foundation
-- 💻 **1+ years** of practical development experience
-- 🚀 **5+ projects** completed showcasing diverse technical skills
-- 🌐 **Full-stack expertise** in MERN stack development
-- 📍 **Based in Chennai, India** - Open to remote opportunities
+Visit the live portfolio: [https://subash-s-66.github.io/Subash-Portfolio](https://subash-s-66.github.io/Subash-Portfolio)
 
 ## 🛠️ Tech Stack
+- **Frontend**: React, Vite, Tailwind CSS, Framer Motion
+- **Backend**: Node.js, Express.js
+- **Deployment**: GitHub Pages
 
-### Frontend
-- React 18, Vite, Tailwind CSS
-- Framer Motion, Lucide React
-- React Intersection Observer
+## 📁 Repository Structure
+```
+├── frontend/          # React frontend application
+├── backend/           # Express.js backend server
+├── assets/            # Built assets for GitHub Pages
+└── index.html         # Main HTML file for GitHub Pages
+```
 
-### Backend
-- Node.js, Express.js
-- Nodemailer, CORS, Helmet
-- Express Rate Limit, Express Validator
+## 🔒 Repository Policy
+This is a **view-only** repository. The code is shared for educational and portfolio purposes. Please do not submit pull requests or create issues unless specifically requested.
 
-### Database
-- MySQL, MongoDB, PostgreSQL
+## 📧 Contact
+- **Email**: [Your Email]
+- **LinkedIn**: [Your LinkedIn]
+- **GitHub**: [Your GitHub Profile]
 
 ## 📄 License
-
-MIT License - see LICENSE file for details
+This project is for portfolio purposes. All rights reserved.
 
 ---
-
-**Contact**: subash.93450@gmail.com  
-**GitHub**: [@Subash-S-66](https://github.com/Subash-S-66)  
-**LinkedIn**: [Subash S](https://www.linkedin.com/in/subash-s-514aa9373)
+*Built with ❤️ by Subash S*
