@@ -16,6 +16,7 @@ import {
   Sparkles,
   MessageCircle
 } from 'lucide-react'
+import { API_ENDPOINTS } from '../config/api'
 
 // Move data outside component to prevent recreation on every render
 const contactInfo = [
@@ -125,7 +126,7 @@ const Contact = () => {
     setIsSubmitting(true)
     
     try {
-      const response = await fetch('http://localhost:5000/api/contact', {
+      const response = await fetch(API_ENDPOINTS.CONTACT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

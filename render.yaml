@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: subash-portfolio-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: cd backend && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CLIENT_URL
+        value: https://subash-s-66.github.io
+      - key: EMAIL_USER
+        value: subash.93450@gmail.com
+      - key: EMAIL_PASS
+        sync: false  # You'll set this in the dashboard
