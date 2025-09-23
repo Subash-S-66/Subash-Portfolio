@@ -54,14 +54,9 @@ const createTransporter = () => {
       }
     })
   } else {
-    // Fallback to hardcoded credentials for development
-    return nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'subash.93450@gmail.com',
-        pass: 'zwdi uvfc tqfn tzmz'
-      }
-    })
+    // Development fallback - requires environment variables
+    console.warn('⚠️  Email not configured. Set EMAIL_USER and EMAIL_PASS environment variables.')
+    return null
   }
 }
 
@@ -123,6 +118,13 @@ app.post('/api/contact',
 
       // Create email transporter
       const transporter = createTransporter()
+      
+      if (!transporter) {
+        return res.status(500).json({
+          success: false,
+          message: 'Email service not configured. Please contact me directly at subash.93450@gmail.com'
+        })
+      }
 
       // Email content
       const mailOptions = {
