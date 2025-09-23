@@ -18,12 +18,16 @@ app.set('trust proxy', 1)
 app.use(helmet())
 app.use(cors({
   origin: [
-    process.env.CLIENT_URL || 'https://subash-s-66.github.io',
+    process.env.CLIENT_URL || 'https://subash-s-66.github.io/Subash-Portfolio',
     'http://localhost:3000',
     'http://localhost:3001',
-    'http://localhost:3002'
+    'http://localhost:3002',
+    'https://subash-s-66.github.io'
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 200
 }))
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
@@ -59,6 +63,15 @@ const createTransporter = () => {
     return null
   }
 }
+
+// Handle preflight requests
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*')
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+  res.header('Access-Control-Allow-Credentials', 'true')
+  res.sendStatus(200)
+})
 
 // Routes
 app.get('/', (req, res) => {
