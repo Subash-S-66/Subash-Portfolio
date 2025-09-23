@@ -69,7 +69,7 @@ app.get('/', (req, res) => {
       contact: '/api/contact',
       portfolio: '/api/portfolio'
     },
-    frontend: 'https://subash-s-66.github.io/portfolio'
+    frontend: 'https://subash-s-66.github.io/Subash-Portfolio'
   })
 })
 
