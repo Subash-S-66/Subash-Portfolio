@@ -10,7 +10,7 @@ const projects = [
       title: 'BOLT & BROOK - E-COMMERCE WEBSITE',
       role: 'FULL-STACK DEVELOPER (FRONTEND, BACKEND & DATABASE)',
       date: '2025-2026',
-      description: 'Developed a full-stack e-commerce website for selling dresses with integrated Razorpay payment gateway (test mode). Served 500+ users with 99.9% uptime.',
+      description: 'Developed a full-stack e-commerce website for selling dresses with integrated Razorpay payment gateway (test mode).',
       features: [
         'Role-based login system (Admin & Customer) to control access to product management, orders, and user accounts',
         'Clean, mobile-friendly UI using Tailwind CSS for smooth shopping experience',
@@ -28,7 +28,7 @@ const projects = [
       title: 'SERVIFY - FREELANCE BIDDING PLATFORM',
       role: 'FRONT-END DEVELOPER',
       date: '2024-2025',
-      description: 'Developed a real-time freelance bidding platform enabling clients to post projects and freelancers to place competitive bids. Processed 200+ bids with 95% user satisfaction.',
+      description: 'Developed a real-time freelance bidding platform enabling clients to post projects and freelancers to place competitive bids.',
       features: [
         'Built interactive dashboards and responsive product listings using React.js and CSS',
         'Real-time bidding system for project management',
