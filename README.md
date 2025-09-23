@@ -69,7 +69,7 @@ npm run start
 
 ## 🌐 Live Demo
 
-**Frontend**: [https://subash-s-66.github.io/portfolio](https://subash-s-66.github.io/portfolio)
+**Frontend**: [https://subash-s-66.github.io/portfolio](https://subash-s-66.github.io/Subash-Portfolio/)
 
 ## 👨‍💻 About Me
 
