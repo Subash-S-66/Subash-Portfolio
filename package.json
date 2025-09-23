@@ -4,7 +4,7 @@
   "description": "Full-stack portfolio website with React frontend and Express backend",
   "private": true,
   "type": "module",
-  "homepage": "https://subash-s-66.github.io/portfolio",
+  "homepage": "https://subash-s-66.github.io/Subash-Portfolio",
   "scripts": {
     "dev": "npx vite",
     "build": "npx vite build",
