@@ -73,6 +73,7 @@ const sendEmail = async (to, subject, html, replyTo = null) => {
     
     const result = await resend.emails.send(emailData)
     console.log('Email sent successfully:', result.data?.id)
+    console.log('Full Resend response:', JSON.stringify(result, null, 2))
     return result
   } catch (error) {
     console.error('Email sending failed:', error.message)
@@ -176,8 +177,9 @@ app.post('/api/contact',
       `
       
       // Send email notification
-      console.log('Sending email notification')
-      await sendEmail(process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com', `Portfolio Contact: ${subject}`, mainEmailHtml, email)
+      const notificationEmail = process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com'
+      console.log('Sending email notification to:', notificationEmail)
+      await sendEmail(notificationEmail, `Portfolio Contact: ${subject}`, mainEmailHtml, email)
 
       res.json({
         success: true,
