@@ -177,7 +177,7 @@ app.post('/api/contact',
       
       // Send email notification
       console.log('Sending email notification')
-      await sendEmail(process.env.NOTIFICATION_EMAIL || 'your-email@gmail.com', `Portfolio Contact: ${subject}`, mainEmailHtml, email)
+      await sendEmail(process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com', `Portfolio Contact: ${subject}`, mainEmailHtml, email)
 
       res.json({
         success: true,
