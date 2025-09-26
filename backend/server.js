@@ -17,6 +17,9 @@ if (process.env.NODE_ENV === 'development') {
   console.log(`🔧 Using PORT: ${PORT}`)
   console.log(`🔧 RESEND_API_KEY: ${process.env.RESEND_API_KEY ? 'SET' : 'NOT SET'}`)
   console.log(`🔧 NODE_ENV: ${process.env.NODE_ENV}`)
+} else {
+  // Always log API key status in production for debugging
+  console.log(`🔧 RESEND_API_KEY: ${process.env.RESEND_API_KEY ? 'SET' : 'NOT SET'}`)
 }
 
 // Trust proxy for rate limiting (required for Render.com)
@@ -69,9 +72,11 @@ const sendEmail = async (to, subject, html, replyTo = null) => {
     }
     
     const result = await resend.emails.send(emailData)
+    console.log('Email sent successfully:', result.data?.id)
     return result
   } catch (error) {
-    console.error('Email sending failed:', error)
+    console.error('Email sending failed:', error.message)
+    console.error('Error details:', error)
     throw error
   }
 }
