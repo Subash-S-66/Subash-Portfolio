@@ -4,7 +4,7 @@ import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import { body, validationResult } from 'express-validator'
-import nodemailer from 'nodemailer'
+import { Resend } from 'resend'
 
 dotenv.config()
 
@@ -14,8 +14,7 @@ const PORT = process.env.PORT || 5000
 // Log the port for debugging
 console.log(`🔧 Environment PORT: ${process.env.PORT}`)
 console.log(`🔧 Using PORT: ${PORT}`)
-console.log(`🔧 EMAIL_USER: ${process.env.EMAIL_USER}`)
-console.log(`🔧 EMAIL_PASS: ${process.env.EMAIL_PASS ? 'SET' : 'NOT SET'}`)
+console.log(`🔧 RESEND_API_KEY: ${process.env.RESEND_API_KEY ? 'SET' : 'NOT SET'}`)
 console.log(`🔧 NODE_ENV: ${process.env.NODE_ENV}`)
 
 // Trust proxy for rate limiting (required for Render.com)
@@ -54,20 +53,28 @@ const contactLimiter = rateLimit({
   message: 'Too many contact form submissions, please try again later.'
 })
 
-// Email transporter configuration
-const createTransporter = () => {
-  if (process.env.NODE_ENV === 'production' && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-    return nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    })
-  } else {
-    // Development fallback - requires environment variables
-    console.warn('⚠️  Email not configured. Set EMAIL_USER and EMAIL_PASS environment variables.')
-    return null
+// Resend email configuration
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+const sendEmail = async (to, subject, html, replyTo = null) => {
+  try {
+    const emailData = {
+      from: 'Portfolio Contact <onboarding@resend.dev>',
+      to: [to],
+      subject: subject,
+      html: html
+    }
+    
+    if (replyTo) {
+      emailData.reply_to = replyTo
+    }
+    
+    const result = await resend.emails.send(emailData)
+    console.log('✅ Email sent successfully:', result.data?.id)
+    return result
+  } catch (error) {
+    console.error('❌ Email sending failed:', error)
+    throw error
   }
 }
 
@@ -144,75 +151,60 @@ app.post('/api/contact',
       const { name, email, subject, message } = req.body
       console.log('📧 Processing contact form:', { name, email, subject })
 
-      // Create email transporter
-      const transporter = createTransporter()
-      
-      if (!transporter) {
+      // Check if Resend API key is configured
+      if (!process.env.RESEND_API_KEY) {
         return res.status(500).json({
           success: false,
           message: 'Email service not configured. Please contact me directly at subash.93450@gmail.com'
         })
       }
 
-      // Email content
-      const mailOptions = {
-        from: process.env.EMAIL_USER || 'subash.93450@gmail.com',
-        to: 'subash.93450@gmail.com',
-        subject: `Portfolio Contact: ${subject}`,
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #0ea5e9;">New Contact Form Submission</h2>
-            <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <p><strong>Name:</strong> ${name}</p>
-              <p><strong>Email:</strong> ${email}</p>
-              <p><strong>Subject:</strong> ${subject}</p>
-            </div>
-            <div style="background-color: #ffffff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-              <h3 style="color: #334155; margin-top: 0;">Message:</h3>
-              <p style="line-height: 1.6; color: #475569;">${message.replace(/\n/g, '<br>')}</p>
-            </div>
-            <div style="margin-top: 20px; padding: 15px; background-color: #f0f9ff; border-radius: 8px; border-left: 4px solid #0ea5e9;">
-              <p style="margin: 0; color: #0369a1; font-size: 14px;">
-                This message was sent from your portfolio contact form at ${new Date().toLocaleString()}
-              </p>
-            </div>
-          </div>
-        `,
-        replyTo: email
-      }
 
-      // Send email
+      // Send main email to you
       console.log('📧 Attempting to send main email...')
-      const mainEmailResult = await transporter.sendMail(mailOptions)
-      console.log('✅ Main email sent successfully:', mainEmailResult.messageId)
-
-      // Send auto-reply to user
-      const autoReplyOptions = {
-        from: process.env.EMAIL_USER || 'subash.93450@gmail.com',
-        to: email,
-        subject: 'Thank you for contacting Subash S',
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #0ea5e9;">Thank you for reaching out!</h2>
-            <p>Hi ${name},</p>
-            <p>Thank you for contacting me through my portfolio. I've received your message and will get back to you as soon as possible.</p>
-            <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <p><strong>Your message:</strong></p>
-              <p style="font-style: italic; color: #475569;">"${message}"</p>
-            </div>
-            <p>In the meantime, feel free to check out my <a href="https://github.com/Subash-S-66" style="color: #0ea5e9;">GitHub profile</a> or connect with me on <a href="https://www.linkedin.com/in/subash-s-514aa9373" style="color: #0ea5e9;">LinkedIn</a>.</p>
-            <p>Best regards,<br>Subash S</p>
-            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;">
-            <p style="font-size: 12px; color: #64748b;">
-              This is an automated response. Please do not reply to this email.
+      const mainEmailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #0ea5e9;">New Contact Form Submission</h2>
+          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Subject:</strong> ${subject}</p>
+          </div>
+          <div style="background-color: #ffffff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+            <h3 style="color: #334155; margin-top: 0;">Message:</h3>
+            <p style="line-height: 1.6; color: #475569;">${message.replace(/\n/g, '<br>')}</p>
+          </div>
+          <div style="margin-top: 20px; padding: 15px; background-color: #f0f9ff; border-radius: 8px; border-left: 4px solid #0ea5e9;">
+            <p style="margin: 0; color: #0369a1; font-size: 14px;">
+              This message was sent from your portfolio contact form at ${new Date().toLocaleString()}
             </p>
           </div>
-        `
-      }
+        </div>
+      `
+      
+      await sendEmail('subash.93450@gmail.com', `Portfolio Contact: ${subject}`, mainEmailHtml, email)
 
+      // Send auto-reply to user
       console.log('📧 Attempting to send auto-reply email...')
-      const autoReplyResult = await transporter.sendMail(autoReplyOptions)
-      console.log('✅ Auto-reply email sent successfully:', autoReplyResult.messageId)
+      const autoReplyHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #0ea5e9;">Thank you for reaching out!</h2>
+          <p>Hi ${name},</p>
+          <p>Thank you for contacting me through my portfolio. I've received your message and will get back to you as soon as possible.</p>
+          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p><strong>Your message:</strong></p>
+            <p style="font-style: italic; color: #475569;">"${message}"</p>
+          </div>
+          <p>In the meantime, feel free to check out my <a href="https://github.com/Subash-S-66" style="color: #0ea5e9;">GitHub profile</a> or connect with me on <a href="https://www.linkedin.com/in/subash-s-514aa9373" style="color: #0ea5e9;">LinkedIn</a>.</p>
+          <p>Best regards,<br>Subash S</p>
+          <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+          <p style="font-size: 12px; color: #64748b;">
+            This is an automated response. Please do not reply to this email.
+          </p>
+        </div>
+      `
+      
+      await sendEmail(email, 'Thank you for contacting Subash S', autoReplyHtml)
 
       res.json({
         success: true,
