@@ -11,11 +11,13 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
-// Log the port for debugging
-console.log(`🔧 Environment PORT: ${process.env.PORT}`)
-console.log(`🔧 Using PORT: ${PORT}`)
-console.log(`🔧 RESEND_API_KEY: ${process.env.RESEND_API_KEY ? 'SET' : 'NOT SET'}`)
-console.log(`🔧 NODE_ENV: ${process.env.NODE_ENV}`)
+// Production logging
+if (process.env.NODE_ENV === 'development') {
+  console.log(`🔧 Environment PORT: ${process.env.PORT}`)
+  console.log(`🔧 Using PORT: ${PORT}`)
+  console.log(`🔧 RESEND_API_KEY: ${process.env.RESEND_API_KEY ? 'SET' : 'NOT SET'}`)
+  console.log(`🔧 NODE_ENV: ${process.env.NODE_ENV}`)
+}
 
 // Trust proxy for rate limiting (required for Render.com)
 app.set('trust proxy', 1)
@@ -25,9 +27,6 @@ app.use(helmet())
 app.use(cors({
   origin: [
     process.env.CLIENT_URL || 'https://subash-s-66.github.io/Subash-Portfolio',
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'http://localhost:3002',
     'https://subash-s-66.github.io'
   ],
   credentials: true,
@@ -70,10 +69,9 @@ const sendEmail = async (to, subject, html, replyTo = null) => {
     }
     
     const result = await resend.emails.send(emailData)
-    console.log('✅ Email sent successfully:', result.data?.id)
     return result
   } catch (error) {
-    console.error('❌ Email sending failed:', error)
+    console.error('Email sending failed:', error)
     throw error
   }
 }
@@ -131,16 +129,9 @@ app.post('/api/contact',
   ],
   async (req, res) => {
     try {
-      console.log('📧 Contact form request received:', {
-        body: req.body,
-        headers: req.headers,
-        ip: req.ip
-      })
-
       // Validate input
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
-        console.log('❌ Validation errors:', errors.array())
         return res.status(400).json({
           success: false,
           message: 'Validation failed',
@@ -149,7 +140,6 @@ app.post('/api/contact',
       }
 
       const { name, email, subject, message } = req.body
-      console.log('📧 Processing contact form:', { name, email, subject })
 
       // Check if Resend API key is configured
       if (!process.env.RESEND_API_KEY) {
@@ -161,7 +151,6 @@ app.post('/api/contact',
 
 
       // Send main email to you
-      console.log('📧 Attempting to send main email...')
       const mainEmailHtml = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #0ea5e9;">New Contact Form Submission</h2>
@@ -185,7 +174,6 @@ app.post('/api/contact',
       await sendEmail('subash.93450@gmail.com', `Portfolio Contact: ${subject}`, mainEmailHtml, email)
 
       // Send auto-reply to user
-      console.log('📧 Attempting to send auto-reply email...')
       const autoReplyHtml = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #0ea5e9;">Thank you for reaching out!</h2>
@@ -212,13 +200,7 @@ app.post('/api/contact',
       })
 
     } catch (error) {
-      console.error('❌ Contact form error:', error.message)
-      console.error('❌ Full error:', error)
-      
-      // Check if it's an email authentication error
-      if (error.message.includes('authentication') || error.message.includes('password')) {
-        console.error('❌ Email authentication failed - check EMAIL_PASS')
-      }
+      console.error('Contact form error:', error.message)
       
       res.status(500).json({
         success: false,
