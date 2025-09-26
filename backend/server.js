@@ -61,7 +61,7 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 const sendEmail = async (to, subject, html, replyTo = null) => {
   try {
     const emailData = {
-      from: 'Portfolio Contact <noreply@subash-s-66.github.io>',
+      from: 'Portfolio Contact <noreply@subash-portfolio-backend.onrender.com>',
       to: [to],
       subject: subject,
       html: html
