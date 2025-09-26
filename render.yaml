@@ -12,7 +12,3 @@ services:
         value: https://subash-s-66.github.io/Subash-Portfolio/
       - key: RESEND_API_KEY
         value: re_HYQLdfAE_8QxdYsTaJbDqnL9M3tXsvYuE
-      - key: AUTO_REPLY_EMAIL
-        value: your-email@gmail.com
-      - key: AUTO_REPLY_PASS
-        value: your-app-password

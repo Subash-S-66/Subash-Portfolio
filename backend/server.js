@@ -5,7 +5,6 @@ import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import { body, validationResult } from 'express-validator'
 import { Resend } from 'resend'
-import nodemailer from 'nodemailer'
 
 dotenv.config()
 
@@ -56,21 +55,10 @@ const contactLimiter = rateLimit({
   message: 'Too many contact form submissions, please try again later.'
 })
 
-// Resend email configuration for main emails
+// Resend email configuration
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-// Nodemailer configuration for auto-reply emails
-const createAutoReplyTransporter = () => {
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.AUTO_REPLY_EMAIL,
-      pass: process.env.AUTO_REPLY_PASS
-    }
-  })
-}
-
-const sendMainEmail = async (to, subject, html, replyTo = null) => {
+const sendEmail = async (to, subject, html, replyTo = null) => {
   try {
     const emailData = {
       from: 'Portfolio Contact <onboarding@resend.dev>',
@@ -84,30 +72,10 @@ const sendMainEmail = async (to, subject, html, replyTo = null) => {
     }
     
     const result = await resend.emails.send(emailData)
-    console.log('Main email sent successfully:', result.data?.id)
+    console.log('Email sent successfully:', result.data?.id)
     return result
   } catch (error) {
-    console.error('Main email sending failed:', error.message)
-    throw error
-  }
-}
-
-const sendAutoReplyEmail = async (to, subject, html) => {
-  try {
-    const transporter = createAutoReplyTransporter()
-    
-    const mailOptions = {
-      from: 'Subash S Portfolio <subash.93450@gmail.com>',
-      to: to,
-      subject: subject,
-      html: html
-    }
-    
-    const result = await transporter.sendMail(mailOptions)
-    console.log('Auto-reply email sent successfully:', result.messageId)
-    return result
-  } catch (error) {
-    console.error('Auto-reply email sending failed:', error.message)
+    console.error('Email sending failed:', error.message)
     throw error
   }
 }
@@ -207,42 +175,9 @@ app.post('/api/contact',
         </div>
       `
       
-      // Send main email using Resend
-      console.log('Sending main email to subash.93450@gmail.com using Resend')
-      await sendMainEmail('subash.93450@gmail.com', `Portfolio Contact: ${subject}`, mainEmailHtml, email)
-
-      // Send auto-reply using Gmail SMTP (only if different from main email)
-      if (email !== 'subash.93450@gmail.com') {
-        console.log(`Sending auto-reply to ${email} using Gmail SMTP`)
-        const autoReplyHtml = `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #0ea5e9;">Thank you for reaching out!</h2>
-            <p>Hi ${name},</p>
-            <p>Thank you for contacting me through my portfolio. I've received your message and will get back to you as soon as possible.</p>
-            <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <p><strong>Your message:</strong></p>
-              <p style="font-style: italic; color: #475569;">"${message}"</p>
-            </div>
-            <p>In the meantime, feel free to check out my <a href="https://github.com/Subash-S-66" style="color: #0ea5e9;">GitHub profile</a> or connect with me on <a href="https://www.linkedin.com/in/subash-s-514aa9373" style="color: #0ea5e9;">LinkedIn</a>.</p>
-            <p>Best regards,<br>Subash S</p>
-            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;">
-            <p style="font-size: 12px; color: #64748b;">
-              This is an automated response. Please do not reply to this email.
-            </p>
-          </div>
-        `
-        
-        try {
-          await sendAutoReplyEmail(email, 'Thank you for contacting Subash S', autoReplyHtml)
-          console.log('Auto-reply email sent successfully to:', email)
-        } catch (autoReplyError) {
-          console.error('Auto-reply email failed for:', email)
-          console.error('Auto-reply error:', autoReplyError.message)
-          // Don't fail the entire request if auto-reply fails
-        }
-      } else {
-        console.log('Skipping auto-reply - same email as main recipient')
-      }
+      // Send email notification
+      console.log('Sending email notification to subash.93450@gmail.com')
+      await sendEmail('subash.93450@gmail.com', `Portfolio Contact: ${subject}`, mainEmailHtml, email)
 
       res.json({
         success: true,
