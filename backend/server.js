@@ -61,7 +61,7 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 // Nodemailer configuration for auto-reply emails
 const createAutoReplyTransporter = () => {
-  return nodemailer.createTransporter({
+  return nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: process.env.AUTO_REPLY_EMAIL || 'subash.93450@gmail.com',
