@@ -13,6 +13,6 @@ services:
       - key: RESEND_API_KEY
         value: re_HYQLdfAE_8QxdYsTaJbDqnL9M3tXsvYuE
       - key: AUTO_REPLY_EMAIL
-        value: subash.93450@gmail.com
+        value: your-email@gmail.com
       - key: AUTO_REPLY_PASS
-        value: epam mxaf rbuu mxzm
+        value: your-app-password

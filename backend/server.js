@@ -64,8 +64,8 @@ const createAutoReplyTransporter = () => {
   return nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.AUTO_REPLY_EMAIL || 'subash.93450@gmail.com',
-      pass: process.env.AUTO_REPLY_PASS || 'epam mxaf rbuu mxzm'
+      user: process.env.AUTO_REPLY_EMAIL,
+      pass: process.env.AUTO_REPLY_PASS
     }
   })
 }
