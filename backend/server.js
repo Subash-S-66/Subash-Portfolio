@@ -179,28 +179,37 @@ app.post('/api/contact',
       console.log('Sending main email to subash.93450@gmail.com')
       await sendEmail('subash.93450@gmail.com', `Portfolio Contact: ${subject}`, mainEmailHtml, email)
 
-      // Send auto-reply to user
-      console.log(`Sending auto-reply to ${email}`)
-      const autoReplyHtml = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #0ea5e9;">Thank you for reaching out!</h2>
-          <p>Hi ${name},</p>
-          <p>Thank you for contacting me through my portfolio. I've received your message and will get back to you as soon as possible.</p>
-          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <p><strong>Your message:</strong></p>
-            <p style="font-style: italic; color: #475569;">"${message}"</p>
+      // Send auto-reply to user (only if different from main email)
+      if (email !== 'subash.93450@gmail.com') {
+        console.log(`Sending auto-reply to ${email}`)
+        const autoReplyHtml = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #0ea5e9;">Thank you for reaching out!</h2>
+            <p>Hi ${name},</p>
+            <p>Thank you for contacting me through my portfolio. I've received your message and will get back to you as soon as possible.</p>
+            <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <p><strong>Your message:</strong></p>
+              <p style="font-style: italic; color: #475569;">"${message}"</p>
+            </div>
+            <p>In the meantime, feel free to check out my <a href="https://github.com/Subash-S-66" style="color: #0ea5e9;">GitHub profile</a> or connect with me on <a href="https://www.linkedin.com/in/subash-s-514aa9373" style="color: #0ea5e9;">LinkedIn</a>.</p>
+            <p>Best regards,<br>Subash S</p>
+            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+            <p style="font-size: 12px; color: #64748b;">
+              This is an automated response. Please do not reply to this email.
+            </p>
           </div>
-          <p>In the meantime, feel free to check out my <a href="https://github.com/Subash-S-66" style="color: #0ea5e9;">GitHub profile</a> or connect with me on <a href="https://www.linkedin.com/in/subash-s-514aa9373" style="color: #0ea5e9;">LinkedIn</a>.</p>
-          <p>Best regards,<br>Subash S</p>
-          <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;">
-          <p style="font-size: 12px; color: #64748b;">
-            This is an automated response. Please do not reply to this email.
-          </p>
-        </div>
-      `
-      
-      await sendEmail(email, 'Thank you for contacting Subash S', autoReplyHtml)
-      console.log('Auto-reply email sent successfully')
+        `
+        
+        try {
+          await sendEmail(email, 'Thank you for contacting Subash S', autoReplyHtml)
+          console.log('Auto-reply email sent successfully')
+        } catch (autoReplyError) {
+          console.error('Auto-reply email failed:', autoReplyError.message)
+          // Don't fail the entire request if auto-reply fails
+        }
+      } else {
+        console.log('Skipping auto-reply - same email as main recipient')
+      }
 
       res.json({
         success: true,
