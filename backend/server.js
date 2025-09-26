@@ -11,6 +11,10 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
+// Log the port for debugging
+console.log(`🔧 Environment PORT: ${process.env.PORT}`)
+console.log(`🔧 Using PORT: ${PORT}`)
+
 // Trust proxy for rate limiting (required for Render.com)
 app.set('trust proxy', 1)
 
@@ -117,9 +121,16 @@ app.post('/api/contact',
   ],
   async (req, res) => {
     try {
+      console.log('📧 Contact form request received:', {
+        body: req.body,
+        headers: req.headers,
+        ip: req.ip
+      })
+
       // Validate input
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
+        console.log('❌ Validation errors:', errors.array())
         return res.status(400).json({
           success: false,
           message: 'Validation failed',
@@ -128,6 +139,7 @@ app.post('/api/contact',
       }
 
       const { name, email, subject, message } = req.body
+      console.log('📧 Processing contact form:', { name, email, subject })
 
       // Create email transporter
       const transporter = createTransporter()
