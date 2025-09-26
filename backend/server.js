@@ -14,6 +14,9 @@ const PORT = process.env.PORT || 5000
 // Log the port for debugging
 console.log(`🔧 Environment PORT: ${process.env.PORT}`)
 console.log(`🔧 Using PORT: ${PORT}`)
+console.log(`🔧 EMAIL_USER: ${process.env.EMAIL_USER}`)
+console.log(`🔧 EMAIL_PASS: ${process.env.EMAIL_PASS ? 'SET' : 'NOT SET'}`)
+console.log(`🔧 NODE_ENV: ${process.env.NODE_ENV}`)
 
 // Trust proxy for rate limiting (required for Render.com)
 app.set('trust proxy', 1)
