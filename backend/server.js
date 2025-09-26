@@ -201,10 +201,13 @@ app.post('/api/contact',
         `
         
         try {
-          await sendEmail(email, 'Thank you for contacting Subash S', autoReplyHtml)
-          console.log('Auto-reply email sent successfully')
+          const autoReplyResult = await sendEmail(email, 'Thank you for contacting Subash S', autoReplyHtml)
+          console.log('Auto-reply email sent successfully to:', email)
+          console.log('Auto-reply result:', autoReplyResult)
         } catch (autoReplyError) {
-          console.error('Auto-reply email failed:', autoReplyError.message)
+          console.error('Auto-reply email failed for:', email)
+          console.error('Auto-reply error:', autoReplyError.message)
+          console.error('Full error:', autoReplyError)
           // Don't fail the entire request if auto-reply fails
         }
       } else {
