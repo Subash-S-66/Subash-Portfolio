@@ -182,7 +182,9 @@ app.post('/api/contact',
       }
 
       // Send email
-      await transporter.sendMail(mailOptions)
+      console.log('📧 Attempting to send main email...')
+      const mainEmailResult = await transporter.sendMail(mailOptions)
+      console.log('✅ Main email sent successfully:', mainEmailResult.messageId)
 
       // Send auto-reply to user
       const autoReplyOptions = {
@@ -208,7 +210,9 @@ app.post('/api/contact',
         `
       }
 
-      await transporter.sendMail(autoReplyOptions)
+      console.log('📧 Attempting to send auto-reply email...')
+      const autoReplyResult = await transporter.sendMail(autoReplyOptions)
+      console.log('✅ Auto-reply email sent successfully:', autoReplyResult.messageId)
 
       res.json({
         success: true,
@@ -216,7 +220,14 @@ app.post('/api/contact',
       })
 
     } catch (error) {
-      console.error('Contact form error:', error.message)
+      console.error('❌ Contact form error:', error.message)
+      console.error('❌ Full error:', error)
+      
+      // Check if it's an email authentication error
+      if (error.message.includes('authentication') || error.message.includes('password')) {
+        console.error('❌ Email authentication failed - check EMAIL_PASS')
+      }
+      
       res.status(500).json({
         success: false,
         message: 'Failed to send message. Please try again later.'
