@@ -9,7 +9,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: CLIENT_URL
-        value: https://subash-s-66.github.io
+        value: https://subash-s-66.github.io/Subash-Portfolio/
       - key: EMAIL_USER
         value: subash.93450@gmail.com
       - key: EMAIL_PASS
