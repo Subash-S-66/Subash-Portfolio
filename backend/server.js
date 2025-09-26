@@ -149,7 +149,7 @@ app.post('/api/contact',
       if (!process.env.RESEND_API_KEY) {
         return res.status(500).json({
           success: false,
-          message: 'Email service not configured. Please contact me directly at subash.93450@gmail.com'
+          message: 'Email service not configured. Please contact me directly.'
         })
       }
 
@@ -176,8 +176,8 @@ app.post('/api/contact',
       `
       
       // Send email notification
-      console.log('Sending email notification to subash.93450@gmail.com')
-      await sendEmail('subash.93450@gmail.com', `Portfolio Contact: ${subject}`, mainEmailHtml, email)
+      console.log('Sending email notification')
+      await sendEmail(process.env.NOTIFICATION_EMAIL || 'your-email@gmail.com', `Portfolio Contact: ${subject}`, mainEmailHtml, email)
 
       res.json({
         success: true,
@@ -202,7 +202,7 @@ app.get('/api/portfolio', (req, res) => {
       name: 'Subash S',
       title: 'B.Tech Computer Science Student',
       subtitle: 'Full Stack Developer using MERN Stack',
-      email: 'subash.93450@gmail.com',
+      email: 'your-email@gmail.com',
       phone: '+91-9345081127',
       location: 'Chennai, India',
       github: 'https://github.com/Subash-S-66',
