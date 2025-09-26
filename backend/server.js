@@ -171,9 +171,11 @@ app.post('/api/contact',
         </div>
       `
       
+      console.log('Sending main email to subash.93450@gmail.com')
       await sendEmail('subash.93450@gmail.com', `Portfolio Contact: ${subject}`, mainEmailHtml, email)
 
       // Send auto-reply to user
+      console.log(`Sending auto-reply to ${email}`)
       const autoReplyHtml = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #0ea5e9;">Thank you for reaching out!</h2>
@@ -193,6 +195,7 @@ app.post('/api/contact',
       `
       
       await sendEmail(email, 'Thank you for contacting Subash S', autoReplyHtml)
+      console.log('Auto-reply email sent successfully')
 
       res.json({
         success: true,
