@@ -5,7 +5,6 @@ import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import { body, validationResult } from 'express-validator'
 import { Resend } from 'resend'
-import nodemailer from 'nodemailer'
 
 dotenv.config()
 
@@ -54,16 +53,7 @@ const contactLimiter = rateLimit({
 // Resend email configuration
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-// Nodemailer configuration for auto-reply emails
-const createTransporter = () => {
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    }
-  })
-}
+// Note: Using Resend for both notification and auto-reply emails for better reliability
 
 const sendEmail = async (to, subject, html, replyTo = null) => {
   try {
@@ -90,8 +80,6 @@ const sendEmail = async (to, subject, html, replyTo = null) => {
 
 const sendAutoReply = async (to, name, subject) => {
   try {
-    const transporter = createTransporter()
-    
     const autoReplyHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #0ea5e9, #3b82f6); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
@@ -135,15 +123,15 @@ const sendAutoReply = async (to, name, subject) => {
       </div>
     `
     
-    const mailOptions = {
-      from: process.env.AUTO_REPLY_EMAIL,
-      to: to,
+    const emailData = {
+      from: 'Subash S <onboarding@resend.dev>',
+      to: [to],
       subject: `Re: ${subject} - Thank you for contacting Subash S`,
       html: autoReplyHtml
     }
     
-    const result = await transporter.sendMail(mailOptions)
-    console.log('Auto-reply email sent successfully:', result.messageId)
+    const result = await resend.emails.send(emailData)
+    console.log('Auto-reply email sent successfully:', result.data?.id)
     return result
   } catch (error) {
     console.error('Auto-reply email sending failed:', error.message)
