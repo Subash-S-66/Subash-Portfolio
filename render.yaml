@@ -11,6 +11,6 @@ services:
       - key: CLIENT_URL
         value: https://subash-s-66.github.io/Subash-Portfolio/
       - key: RESEND_API_KEY
-        value: re_HYQLdfAE_8QxdYsTaJbDqnL9M3tXsvYuE
+        value: YOUR_RESEND_API_KEY_HERE
       - key: NOTIFICATION_EMAIL
-        value: subash.93450@gmail.com
+        value: your-email@gmail.com
