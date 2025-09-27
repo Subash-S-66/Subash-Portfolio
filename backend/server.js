@@ -239,13 +239,19 @@ app.post('/api/contact',
       console.log('Sending email notification to:', notificationEmail)
       await sendEmail(notificationEmail, `Portfolio Contact: ${subject}`, mainEmailHtml, email)
 
-      // Send auto-reply email to the user
+      // Send auto-reply email to the user (currently sending to self due to Resend testing mode)
       console.log('Sending auto-reply email to:', email)
-      await sendAutoReply(email, name, subject)
+      try {
+        await sendAutoReply(email, name, subject)
+      } catch (error) {
+        console.log('Auto-reply failed, sending to self instead:', error.message)
+        // Fallback: send auto-reply to yourself when Resend is in testing mode
+        await sendAutoReply(notificationEmail, name, subject)
+      }
 
       res.json({
         success: true,
-        message: 'Message sent successfully! I\'ll get back to you soon. Check your email for a confirmation.'
+        message: 'Message sent successfully! I\'ll get back to you soon.'
       })
 
     } catch (error) {
