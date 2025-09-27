@@ -5,22 +5,18 @@ import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import { body, validationResult } from 'express-validator'
 import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
 dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT || 5000
 
-// Production logging
-if (process.env.NODE_ENV === 'development') {
-  console.log(`🔧 Environment PORT: ${process.env.PORT}`)
-  console.log(`🔧 Using PORT: ${PORT}`)
-  console.log(`🔧 RESEND_API_KEY: ${process.env.RESEND_API_KEY ? 'SET' : 'NOT SET'}`)
-  console.log(`🔧 NODE_ENV: ${process.env.NODE_ENV}`)
-} else {
-  // Always log API key status in production for debugging
-  console.log(`🔧 RESEND_API_KEY: ${process.env.RESEND_API_KEY ? 'SET' : 'NOT SET'}`)
-}
+// Always log port information for debugging
+console.log(`🔧 Environment PORT: ${process.env.PORT}`)
+console.log(`🔧 Using PORT: ${PORT}`)
+console.log(`🔧 RESEND_API_KEY: ${process.env.RESEND_API_KEY ? 'SET' : 'NOT SET'}`)
+console.log(`🔧 NODE_ENV: ${process.env.NODE_ENV}`)
 
 // Trust proxy for rate limiting (required for Render.com)
 app.set('trust proxy', 1)
@@ -58,6 +54,17 @@ const contactLimiter = rateLimit({
 // Resend email configuration
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+// Nodemailer configuration for auto-reply emails
+const createTransporter = () => {
+  return nodemailer.createTransporter({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  })
+}
+
 const sendEmail = async (to, subject, html, replyTo = null) => {
   try {
     const emailData = {
@@ -77,6 +84,69 @@ const sendEmail = async (to, subject, html, replyTo = null) => {
     return result
   } catch (error) {
     console.error('Email sending failed:', error.message)
+    throw error
+  }
+}
+
+const sendAutoReply = async (to, name, subject) => {
+  try {
+    const transporter = createTransporter()
+    
+    const autoReplyHtml = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #0ea5e9, #3b82f6); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+          <h1 style="color: white; margin: 0; font-size: 28px;">Thank You for Contacting Me!</h1>
+        </div>
+        
+        <div style="background-color: #ffffff; padding: 30px; border: 1px solid #e2e8f0; border-radius: 0 0 10px 10px;">
+          <p style="font-size: 18px; color: #334155; margin-bottom: 20px;">Hi ${name},</p>
+          
+          <p style="color: #475569; line-height: 1.6; margin-bottom: 20px;">
+            Thank you for reaching out through my portfolio contact form! I've received your message about "<strong>${subject}</strong>" and I truly appreciate you taking the time to connect with me.
+          </p>
+          
+          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #0ea5e9;">
+            <p style="margin: 0; color: #0369a1; font-weight: 500;">
+              📧 I'll review your message and get back to you within 24-48 hours.
+            </p>
+          </div>
+          
+          <p style="color: #475569; line-height: 1.6; margin-bottom: 20px;">
+            In the meantime, feel free to check out my latest projects on GitHub or connect with me on LinkedIn. I'm always excited to discuss new opportunities and interesting projects!
+          </p>
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="https://github.com/Subash-S-66" style="display: inline-block; background-color: #0ea5e9; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 0 10px; font-weight: 500;">GitHub</a>
+            <a href="https://www.linkedin.com/in/subash-s-514aa9373" style="display: inline-block; background-color: #0077b5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 0 10px; font-weight: 500;">LinkedIn</a>
+          </div>
+          
+          <p style="color: #64748b; font-size: 14px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+            Best regards,<br>
+            <strong>Subash S</strong><br>
+            B.Tech Computer Science Student<br>
+            Full Stack Developer (MERN Stack)
+          </p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px; color: #94a3b8; font-size: 12px;">
+          <p>This is an automated response. Please do not reply to this email.</p>
+          <p>If you need immediate assistance, please contact me directly at subash.93450@gmail.com</p>
+        </div>
+      </div>
+    `
+    
+    const mailOptions = {
+      from: process.env.AUTO_REPLY_EMAIL,
+      to: to,
+      subject: `Re: ${subject} - Thank you for contacting Subash S`,
+      html: autoReplyHtml
+    }
+    
+    const result = await transporter.sendMail(mailOptions)
+    console.log('Auto-reply email sent successfully:', result.messageId)
+    return result
+  } catch (error) {
+    console.error('Auto-reply email sending failed:', error.message)
     throw error
   }
 }
@@ -176,14 +246,18 @@ app.post('/api/contact',
         </div>
       `
       
-      // Send email notification
+      // Send email notification to you
       const notificationEmail = process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com'
       console.log('Sending email notification to:', notificationEmail)
       await sendEmail(notificationEmail, `Portfolio Contact: ${subject}`, mainEmailHtml, email)
 
+      // Send auto-reply email to the user
+      console.log('Sending auto-reply email to:', email)
+      await sendAutoReply(email, name, subject)
+
       res.json({
         success: true,
-        message: 'Message sent successfully! I\'ll get back to you soon.'
+        message: 'Message sent successfully! I\'ll get back to you soon. Check your email for a confirmation.'
       })
 
     } catch (error) {
@@ -250,6 +324,6 @@ app.use('*', (req, res) => {
   })
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`)
 })

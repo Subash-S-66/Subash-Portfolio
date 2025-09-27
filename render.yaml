@@ -14,3 +14,11 @@ services:
         value: re_HYQLdfAE_8QxdYsTaJbDqnL9M3tXsvYuE
       - key: NOTIFICATION_EMAIL
         value: subash.93450@gmail.com
+      - key: AUTO_REPLY_EMAIL
+        value: subash.93450@gmail.com
+      - key: AUTO_REPLY_PASS
+        value: epam mxaf rbuu mxzm
+      - key: EMAIL_USER
+        value: subash.93450@gmail.com
+      - key: EMAIL_PASS
+        value: epam mxaf rbuu mxzm
