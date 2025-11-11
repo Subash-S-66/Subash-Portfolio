@@ -39,7 +39,8 @@ const projects = [
       icon: Database,
       gradient: 'from-green-500 to-teal-600',
       accentColor: 'from-emerald-400 to-green-500',
-      bgPattern: 'from-green-100 to-teal-100'
+      bgPattern: 'from-green-100 to-teal-100',
+      liveDemo: 'https://subash-s-66.github.io/Servify/'
     },
     {
       id: 3,
@@ -57,7 +58,8 @@ const projects = [
       icon: Zap,
       gradient: 'from-orange-500 to-red-600',
       accentColor: 'from-yellow-400 to-orange-500',
-      bgPattern: 'from-orange-100 to-red-100'
+      bgPattern: 'from-orange-100 to-red-100',
+      liveDemo: 'https://subash-s-66.github.io/expense-tracking-system/'
     }
   ]
 
@@ -222,14 +224,27 @@ const Projects = () => {
                   </motion.div>
                   
                   <div className="mt-4 flex space-x-3">
-                    <motion.button 
-                      className={`flex-1 bg-gradient-to-r ${project.gradient} text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 shadow-lg`}
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                      <span>Live Demo</span>
-                    </motion.button>
+                    {project.liveDemo ? (
+                      <motion.a
+                        href={project.liveDemo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex-1 bg-gradient-to-r ${project.gradient} text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 shadow-lg`}
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                        <span>Live Demo</span>
+                      </motion.a>
+                    ) : (
+                      <motion.button 
+                        className={`flex-1 bg-gradient-to-r ${project.gradient} text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 shadow-lg opacity-50 cursor-not-allowed`}
+                        disabled
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                        <span>Live Demo</span>
+                      </motion.button>
+                    )}
                     <motion.a
                       href="https://github.com/Subash-S-66"
                       target="_blank"
