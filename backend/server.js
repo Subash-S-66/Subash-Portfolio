@@ -28,14 +28,28 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // Middleware
+// Helmet + CSP: allow Zeabur host and Google Fonts for styles and fonts
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      scriptSrc: ["'self'"],
+      // Allow stylesheet links (external and element-level) from our Zeabur deployment and Google Fonts
+      styleSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        "https://fonts.googleapis.com",
+        process.env.CLIENT_URL || 'https://subash-portfolio.zeabur.app'
+      ],
+      styleSrcElem: [
+        "'self'",
+        "https://fonts.googleapis.com",
+        process.env.CLIENT_URL || 'https://subash-portfolio.zeabur.app'
+      ],
+      // Allow scripts from self; keep unsafe-inline/eval to support some libs if needed
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'"],
+      // Allow API connections from the app origin (Zeabur) and any configured API URL
+      connectSrc: ["'self'", process.env.API_URL || process.env.CLIENT_URL || 'https://subash-portfolio.zeabur.app'],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       objectSrc: ["'none'"],
       mediaSrc: ["'self'"],
@@ -46,7 +60,8 @@ app.use(helmet({
 app.use(cors({
   origin: [
     process.env.CLIENT_URL || 'https://subash-s-66.github.io/Subash-Portfolio',
-    'https://subash-s-66.github.io'
+    'https://subash-s-66.github.io',
+    process.env.ZEABUR_URL || 'https://subash-portfolio.zeabur.app'
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
