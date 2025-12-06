@@ -21,8 +21,8 @@ RUN cd frontend && node ../node_modules/vite/bin/vite.js build
 FROM node:18-alpine AS runtime
 WORKDIR /app/backend
 
-# Install backend deps
-COPY backend/package.json backend/package-lock.json* ./
+# Install backend deps (using root package.json since backend shares dependencies)
+COPY package.json package-lock.json* ./
 RUN npm ci --production --no-audit --no-fund
 
 # Copy backend code
