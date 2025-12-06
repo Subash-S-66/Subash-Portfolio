@@ -12,10 +12,11 @@ function App() {
   useEffect(() => {
     const wakeUpBackend = async () => {
       try {
-        await fetch('https://subash-portfolio-backend.onrender.com/api/health', {
+        const backendBase = import.meta.env.VITE_API_BASE || 'https://subash-portfolio-backend.onrender.com'
+        await fetch(`${backendBase}/api/health`, {
           method: 'GET',
         })
-        console.log('Backend wakeup request sent')
+        console.log('Backend wakeup request sent to', backendBase)
       } catch (error) {
         console.log('Backend wakeup failed (this is normal if backend is starting):', error.message)
       }
