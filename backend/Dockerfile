@@ -17,9 +17,9 @@ ENV VITE_API_BASE=${VITE_API_BASE}
 WORKDIR /src/frontend
 RUN npm ci --no-audit --no-fund
 
-# Make Vite executable and build
-RUN if [ -d "node_modules/.bin" ]; then chmod -R a+rx node_modules/.bin || true; fi
-RUN node node_modules/vite/bin/vite.js build
+# Make Vite executable and build using the root-installed Vite binary
+RUN if [ -d "/src/node_modules/.bin" ]; then chmod -R a+rx /src/node_modules/.bin || true; fi
+RUN node /src/node_modules/vite/bin/vite.js build
 
 
 ### --------- BACKEND RUNTIME STAGE ---------
