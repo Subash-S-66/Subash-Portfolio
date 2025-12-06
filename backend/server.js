@@ -40,16 +40,14 @@ app.use(helmet({
         "https://fonts.googleapis.com",
         process.env.CLIENT_URL || 'https://subash-portfolio.zeabur.app',
         process.env.ZEABUR_URL || 'https://subash-portfolio.zeabur.app',
-        process.env.GITHUB_PAGES_URL || 'https://subash-s-66.github.io',
-        process.env.BACKEND_URL || 'https://subash-portfolio-backend.onrender.com'
+        process.env.GITHUB_PAGES_URL || 'https://subash-s-66.github.io'
       ],
       styleSrcElem: [
         "'self'",
         "https://fonts.googleapis.com",
         process.env.CLIENT_URL || 'https://subash-portfolio.zeabur.app',
         process.env.ZEABUR_URL || 'https://subash-portfolio.zeabur.app',
-        process.env.GITHUB_PAGES_URL || 'https://subash-s-66.github.io',
-        process.env.BACKEND_URL || 'https://subash-portfolio-backend.onrender.com'
+        process.env.GITHUB_PAGES_URL || 'https://subash-s-66.github.io'
       ],
       // Allow scripts from self; keep unsafe-inline/eval to support some libs if needed
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
@@ -57,9 +55,8 @@ app.use(helmet({
       // Allow API connections from the app origin (Zeabur) and any configured API URL
       connectSrc: [
         "'self'",
-        process.env.API_URL || process.env.CLIENT_URL || 'https://subash-portfolio.zeabur.app',
-        process.env.ZEABUR_URL || 'https://subash-portfolio.zeabur.app',
-        process.env.BACKEND_URL || 'https://subash-portfolio-backend.onrender.com'
+        process.env.API_URL || process.env.CLIENT_URL || process.env.ZEABUR_URL || 'https://subash-portfolio.zeabur.app',
+        process.env.ZEABUR_URL || 'https://subash-portfolio.zeabur.app'
       ],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       objectSrc: ["'none'"],
