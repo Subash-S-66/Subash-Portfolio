@@ -23,7 +23,21 @@ console.log(`🔧 NODE_ENV: ${process.env.NODE_ENV}`)
 app.set('trust proxy', 1)
 
 // Middleware
-app.use(helmet())
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["'none'"],
+    },
+  },
+}))
 app.use(cors({
   origin: [
     process.env.CLIENT_URL || 'https://subash-s-66.github.io/Subash-Portfolio',
