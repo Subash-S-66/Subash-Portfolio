@@ -8,20 +8,16 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 
 function App() {
-  // Wake up Render backend on site load
+  // Wake up Zeabur backend on site load
   useEffect(() => {
     const wakeUpBackend = async () => {
       try {
-        const backendBase = import.meta.env.VITE_API_BASE || 'https://subash-portfolio-backend.onrender.com'
-        await fetch(`${backendBase}/api/health`, {
-          method: 'GET',
-        })
-        console.log('Backend wakeup request sent to', backendBase)
+        await fetch('/api/health', { method: 'GET' })
+        console.log('Backend wakeup request sent to /api/health')
       } catch (error) {
         console.log('Backend wakeup failed (this is normal if backend is starting):', error.message)
       }
     }
-
     wakeUpBackend()
   }, [])
 
