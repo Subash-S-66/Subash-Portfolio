@@ -7,6 +7,7 @@ import { body, validationResult } from 'express-validator'
 import { Resend } from 'resend'
 import nodemailer from 'nodemailer'
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 dotenv.config()
 
@@ -21,6 +22,10 @@ console.log(`🔧 NODE_ENV: ${process.env.NODE_ENV}`)
 
 // Trust proxy for rate limiting (required for Render.com)
 app.set('trust proxy', 1)
+
+// Resolve __dirname for ESM so static files are served relative to this file
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // Middleware
 app.use(helmet({
@@ -308,12 +313,12 @@ app.use((err, req, res, next) => {
   })
 })
 
-// Serve static files from the React app build directory
-app.use(express.static('dist'))
+// Serve static files from the React app build directory (relative to this file)
+app.use(express.static(path.join(__dirname, 'dist')))
 
 // Catch all handler: send back React's index.html file for client-side routing
 app.get('*', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'dist', 'index.html'))
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
 })
 
 // 404 handler for API routes

@@ -4,7 +4,9 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  // Use a relative base so built assets load correctly when the app
+  // is served from a subpath (Zeabur may serve under /projects)
+  base: './',
   server: {
     port: 3000,
     proxy: {
