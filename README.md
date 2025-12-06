@@ -4,7 +4,7 @@
 This is my personal portfolio website showcasing my full-stack development skills and projects.
 
 ## 🌐 Live Demo
-Visit the live portfolio: [https://subash-s-66.github.io/Subash-Portfolio](https://subash-s-66.github.io/Subash-Portfolio)
+Visit the live portfolio: [https://subash.zeabur.app](https://subash.zeabur.app)
 
 ## 👨‍💻 About Me
 
