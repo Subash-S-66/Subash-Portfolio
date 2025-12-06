@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   // Use a relative base so built assets load correctly when the app
   // is served from a subpath (Zeabur may serve under /projects)
-  base: './',
+  base: '/',
   server: {
     port: 3000,
     proxy: {

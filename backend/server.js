@@ -162,6 +162,16 @@ app.options('*', (req, res) => {
   res.sendStatus(200)
 })
 
+// Debug endpoints (temporary) to help verify CSP and the served index
+app.get('/_debug/csp', (req, res) => {
+  const csp = res.getHeader('content-security-policy') || res.getHeader('Content-Security-Policy') || 'not-set'
+  res.json({ csp })
+})
+
+app.get('/_debug/index', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
+})
+
 // Routes
 app.get('/api/health', (req, res) => {
   res.json({ 
