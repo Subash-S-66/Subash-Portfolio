@@ -3,8 +3,8 @@ FROM node:18-alpine AS build
 WORKDIR /src
 
 # Copy root package files
-COPY package.json package-lock.json* ./
-RUN npm ci --no-audit --no-fund
+COPY package.json ./
+RUN npm install --no-audit --no-fund
 
 # Copy frontend source
 COPY frontend ./frontend
@@ -22,8 +22,8 @@ FROM node:18-alpine AS runtime
 WORKDIR /app/backend
 
 # Install backend deps (using root package.json since backend shares dependencies)
-COPY package.json package-lock.json* ./
-RUN npm ci --production --no-audit --no-fund
+COPY package.json ./
+RUN npm install --production --no-audit --no-fund
 
 # Copy backend code
 COPY backend/ .
