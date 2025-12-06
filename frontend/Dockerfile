@@ -16,8 +16,13 @@ ARG VITE_API_BASE
 ENV VITE_API_BASE=${VITE_API_BASE}
 
 # Build frontend (Vite root is ./frontend)
-# Use npm exec to avoid npx permission issues in some environments
-RUN npm exec -- vite build
+# Run the locally installed Vite binary directly to avoid `npm exec`/npx auto-install behavior
+# Use node to execute the vite CLI from node_modules
+RUN if [ -f node_modules/vite/bin/vite.js ]; then \
+			node node_modules/vite/bin/vite.js build; \
+		else \
+			echo "Vite binary not found; attempting to install vite and retry" && npm install vite --no-audit --no-fund && node node_modules/vite/bin/vite.js build; \
+		fi
 
 # Production stage: nginx to serve built files
 FROM nginx:alpine
