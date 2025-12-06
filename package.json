@@ -6,7 +6,7 @@
   "type": "module",
   "homepage": "https://subash-s-66.github.io/Subash-Portfolio",
   "scripts": {
-    "build": "cd frontend && node ../node_modules/vite/bin/vite.js build && cp -r dist ../backend/",
+    "build": "cd frontend && node ../node_modules/vite/bin/vite.js build && xcopy /E /I /Y dist ..\\backend\\dist",
     "start": "cd backend && node server.js",
     "dev": "cd frontend && node ../node_modules/vite/bin/vite.js",
     "preview": "cd frontend && node ../node_modules/vite/bin/vite.js preview",
