@@ -6,9 +6,9 @@
   "type": "module",
   "homepage": "https://subash-s-66.github.io/Subash-Portfolio",
   "scripts": {
-    "dev": "cd frontend && ../node_modules/.bin/vite",
-    "build": "cd frontend && ../node_modules/.bin/vite build",
-    "preview": "cd frontend && ../node_modules/.bin/vite preview",
+    "dev": "cd frontend && node ../node_modules/vite/bin/vite.js",
+    "build": "cd frontend && node ../node_modules/vite/bin/vite.js build",
+    "preview": "cd frontend && node ../node_modules/vite/bin/vite.js preview",
     "server": "cd backend && nodemon server.js",
     "start": "cd backend && node server.js",
     "dev:full": "concurrently \"npm run dev\" \"npm run server\""
