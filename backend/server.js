@@ -315,9 +315,13 @@ app.use((err, req, res, next) => {
 
 // Serve static files from the React app build directory (relative to this file)
 app.use(express.static(path.join(__dirname, 'dist')))
+// Also serve the same build when the app is hosted under a subpath (Zeabur uses /projects)
+app.use('/projects', express.static(path.join(__dirname, 'dist')))
 
 // Catch all handler: send back React's index.html file for client-side routing
 app.get('*', (req, res) => {
+  // If the request starts with the Zeabur subpath, ensure we return the built index
+  // so relative asset links resolve under /projects/* correctly.
   res.sendFile(path.join(__dirname, 'dist', 'index.html'))
 })
 
