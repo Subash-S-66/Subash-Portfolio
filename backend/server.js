@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import { body, validationResult } from 'express-validator'
 import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
 dotenv.config()
 
@@ -53,7 +54,22 @@ const contactLimiter = rateLimit({
 // Resend email configuration
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-const sendEmail = async (to, subject, html, replyTo = null) => {
+// Nodemailer transporter (if SMTP env vars are provided)
+let smtpTransporter = null
+const usingSMTP = !!process.env.EMAIL_HOST && !!process.env.EMAIL_USER && !!process.env.EMAIL_PASSWORD
+if (usingSMTP) {
+  smtpTransporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: Number(process.env.EMAIL_PORT) || 587,
+    secure: process.env.EMAIL_PORT === '465',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD
+    }
+  })
+}
+
+const sendEmailWithResend = async (to, subject, html, replyTo = null) => {
   try {
     const emailData = {
       from: 'Portfolio Contact <onboarding@resend.dev>',
@@ -61,18 +77,35 @@ const sendEmail = async (to, subject, html, replyTo = null) => {
       subject: subject,
       html: html
     }
-    
+
     if (replyTo) {
       emailData.reply_to = replyTo
     }
-    
+
     const result = await resend.emails.send(emailData)
-    console.log('Email sent successfully:', result.data?.id)
+    console.log('Resend email sent successfully:', result.data?.id)
     return result
   } catch (error) {
-    console.error('Email sending failed:', error.message)
+    console.error('Resend email sending failed:', error.message)
     throw error
   }
+}
+
+const sendEmailWithSMTP = async (to, subject, html, replyTo = null) => {
+  if (!smtpTransporter) throw new Error('SMTP transporter not configured')
+
+  const mailOptions = {
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+    to,
+    subject,
+    html
+  }
+
+  if (replyTo) mailOptions.replyTo = replyTo
+
+  const info = await smtpTransporter.sendMail(mailOptions)
+  console.log('SMTP email sent:', info.messageId)
+  return info
 }
 
 // Handle preflight requests
@@ -140,39 +173,74 @@ app.post('/api/contact',
 
       const { name, email, subject, message } = req.body
 
-      // Check if Resend API key is configured
-      if (!process.env.RESEND_API_KEY) {
+      // Build main notification HTML
+      const mainEmailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto;">
+          <h2 style="color: #0ea5e9;">New Contact Form Submission</h2>
+          <div style="background-color: #f8fafc; padding: 18px; border-radius: 8px; margin: 18px 0;">
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Subject:</strong> ${subject}</p>
+          </div>
+          <div style="background-color: #ffffff; padding: 18px; border: 1px solid #e2e8f0; border-radius: 8px;">
+            <h3 style="color: #334155; margin-top: 0;">Message</h3>
+            <p style="line-height: 1.6; color: #475569;">${message.replace(/\n/g, '<br>')}</p>
+          </div>
+          <div style="margin-top: 18px; padding: 14px; background-color: #f0f9ff; border-radius: 8px; border-left: 4px solid #0ea5e9;">
+            <p style="margin: 0; color: #0369a1; font-size: 13px;">
+              Received: ${new Date().toLocaleString()}
+            </p>
+          </div>
+        </div>
+      `
+
+      // Auto-reply HTML (friendly, professional template)
+      const autoReplyHtml = `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; max-width:700px;margin:0 auto;">
+          <div style="background:linear-gradient(90deg,#6d28d9,#ec4899);padding:24px;border-radius:8px;color:#fff;text-align:center;">
+            <h2 style="margin:0;font-size:20px;">Thanks for contacting Subash</h2>
+            <p style="margin:6px 0 0 0;opacity:0.95">I've received your message and will get back to you soon.</p>
+          </div>
+          <div style="background:#fff;padding:20px;border:1px solid #eef2ff;border-radius:8px;margin-top:16px;color:#0f172a;">
+            <p style="margin:0 0 8px 0"><strong>Subject:</strong> ${subject}</p>
+            <p style="margin:0 0 12px 0"><strong>Message:</strong></p>
+            <div style="color:#475569;line-height:1.6;border-left:4px solid #eef2ff;padding-left:12px;margin-bottom:12px;">
+              ${message.replace(/\n/g, '<br>')}
+            </div>
+            <p style="margin:0;color:#334155;">If you need a faster reply, you can reply to this email or reach me at <strong>${process.env.EMAIL_TO || process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com'}</strong>.</p>
+          </div>
+          <footer style="text-align:center;margin-top:14px;color:#94a3b8;font-size:12px;">— Subash | Full Stack Developer</footer>
+        </div>
+      `
+
+      // Where to send the admin notification
+      const notificationEmail = process.env.EMAIL_TO || process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com'
+
+      // Send using SMTP if configured, otherwise try Resend
+      if (usingSMTP) {
+        // Send notification to admin
+        await sendEmailWithSMTP(notificationEmail, `Portfolio Contact: ${subject}`, mainEmailHtml, email)
+        // Send auto-reply to sender
+        try {
+          await sendEmailWithSMTP(email, `Thanks for contacting Subash`, autoReplyHtml, notificationEmail)
+        } catch (err) {
+          console.warn('Auto-reply failed (SMTP):', err.message)
+        }
+      } else if (process.env.RESEND_API_KEY) {
+        // Send notification via Resend
+        await sendEmailWithResend(notificationEmail, `Portfolio Contact: ${subject}`, mainEmailHtml, email)
+        // Send auto-reply via Resend
+        try {
+          await sendEmailWithResend(email, `Thanks for contacting Subash`, autoReplyHtml, notificationEmail)
+        } catch (err) {
+          console.warn('Auto-reply failed (Resend):', err.message)
+        }
+      } else {
         return res.status(500).json({
           success: false,
           message: 'Email service not configured. Please contact me directly.'
         })
       }
-
-
-      // Send main email to you
-      const mainEmailHtml = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #0ea5e9;">New Contact Form Submission</h2>
-          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Subject:</strong> ${subject}</p>
-          </div>
-          <div style="background-color: #ffffff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-            <h3 style="color: #334155; margin-top: 0;">Message:</h3>
-            <p style="line-height: 1.6; color: #475569;">${message.replace(/\n/g, '<br>')}</p>
-          </div>
-          <div style="margin-top: 20px; padding: 15px; background-color: #f0f9ff; border-radius: 8px; border-left: 4px solid #0ea5e9;">
-            <p style="margin: 0; color: #0369a1; font-size: 14px;">
-              This message was sent from your portfolio contact form at ${new Date().toLocaleString()}
-            </p>
-          </div>
-        </div>
-      `
-      
-      // Send email notification to you
-      const notificationEmail = process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com'
-      await sendEmail(notificationEmail, `Portfolio Contact: ${subject}`, mainEmailHtml, email)
 
       res.json({
         success: true,

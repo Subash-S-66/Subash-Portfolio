@@ -26,6 +26,7 @@ const skillCategories = [
       bgColor: 'from-blue-100 to-cyan-100',
       skills: [
         { name: 'JavaScript', level: 90, description: 'ES6+, Async/Await, DOM Manipulation - 1+ years' },
+        { name: 'TypeScript', level: 70, description: 'Static typing, Interfaces, Generics - 1+ projects' },
         { name: 'Python', level: 85, description: 'Flask, Data Processing, Regex - 1+ years' },
       ]
     },
@@ -48,7 +49,7 @@ const skillCategories = [
       bgColor: 'from-green-100 to-emerald-100',
       skills: [
         { name: 'Node.js', level: 85, description: 'Event-driven, Non-blocking I/O ' },
-        { name: 'Express.js', level: 80, description: 'RESTful APIs, Middleware - 5+ endpoints' },
+        { name: 'Express.js', level: 85, description: 'RESTful APIs, Middleware - 5+ endpoints' },
         { name: 'Flask', level: 75, description: 'Python Web Framework' },
       ]
     },
@@ -59,8 +60,8 @@ const skillCategories = [
       bgColor: 'from-orange-100 to-red-100',
       skills: [
         { name: 'MySQL', level: 90, description: 'Relational Database, Queries, Joins' },
-        { name: 'MongoDB', level: 70, description: 'NoSQL, Document-based' },
-        { name: 'PostgreSQL', level: 50, description: 'Advanced SQL, JSON support, Extensions' },
+        { name: 'MongoDB', level: 85, description: 'NoSQL, Document-based' },
+        { name: 'PostgreSQL', level: 75, description: 'Advanced SQL, JSON support, Extensions' },
       ]
     },
     {

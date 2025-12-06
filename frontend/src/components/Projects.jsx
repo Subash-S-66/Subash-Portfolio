@@ -40,7 +40,7 @@ const projects = [
       gradient: 'from-green-500 to-teal-600',
       accentColor: 'from-emerald-400 to-green-500',
       bgPattern: 'from-green-100 to-teal-100',
-      liveDemo: 'https://subash-s-66.github.io/Servify/'
+      liveDemo: 'https://servify.zeabur.app/'
     },
     {
       id: 3,
