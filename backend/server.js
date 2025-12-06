@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 import { body, validationResult } from 'express-validator'
 import { Resend } from 'resend'
 import nodemailer from 'nodemailer'
+import path from 'path'
 
 dotenv.config()
 
@@ -305,11 +306,19 @@ app.use((err, req, res, next) => {
   })
 })
 
-// 404 handler
-app.use('*', (req, res) => {
+// Serve static files from the React app build directory
+app.use(express.static('dist'))
+
+// Catch all handler: send back React's index.html file for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'dist', 'index.html'))
+})
+
+// 404 handler for API routes
+app.use('/api/*', (req, res) => {
   res.status(404).json({
     success: false,
-    message: 'Route not found'
+    message: 'API route not found'
   })
 })
 
