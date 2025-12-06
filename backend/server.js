@@ -121,18 +121,6 @@ app.options('*', (req, res) => {
 })
 
 // Routes
-app.get('/', (req, res) => {
-  res.json({ 
-    message: 'Welcome to Subash S Portfolio API',
-    endpoints: {
-      health: '/api/health',
-      contact: '/api/contact',
-      portfolio: '/api/portfolio'
-    },
-    frontend: 'https://subash-s-66.github.io/Subash-Portfolio'
-  })
-})
-
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
