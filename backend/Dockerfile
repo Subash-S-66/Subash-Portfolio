@@ -1,5 +1,5 @@
 ### --------- FRONTEND BUILD STAGE ---------
-FROM node:18-alpine AS builder
+FROM node:18-alpine AS build
 WORKDIR /src
 
 # Copy root package files if needed
@@ -17,7 +17,7 @@ ENV VITE_API_BASE=${VITE_API_BASE}
 RUN cd frontend && npm ci --no-audit --no-fund
 
 # Build frontend
-RUN npm run build
+RUN cd frontend && npm run build
 
 
 ### --------- BACKEND RUNTIME STAGE ---------
@@ -32,7 +32,7 @@ RUN npm ci --production --no-audit --no-fund
 COPY backend/ .
 
 # Copy built frontend from correct path
-COPY --from=builder /src/frontend/dist ./dist
+COPY --from=build /src/frontend/dist ./dist
 
 ENV NODE_ENV=production
 ENV PORT=5000
