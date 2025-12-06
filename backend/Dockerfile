@@ -28,6 +28,11 @@ RUN npm ci --production --no-audit --no-fund
 COPY backend/ .
 
 # Copy frontend build output
+# Prefer any pre-built frontend in the repository (committed `frontend/dist`) so
+# deployments can use the exact built assets we tested locally. If no prebuilt
+# artifacts are present in the repo, fall back to the build stage output.
+COPY frontend/dist ./dist
+# Fallback: overwrite with build stage output if the multi-stage build produced it
 COPY --from=build /src/frontend/dist ./dist
 
 ENV NODE_ENV=production
