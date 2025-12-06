@@ -33,23 +33,34 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      // Allow stylesheet links (external and element-level) from our Zeabur deployment and Google Fonts
+      // Allow stylesheet links (external and element-level) from known deployment hosts and Google Fonts
       styleSrc: [
         "'self'",
         "'unsafe-inline'",
         "https://fonts.googleapis.com",
-        process.env.CLIENT_URL || 'https://subash-portfolio.zeabur.app'
+        process.env.CLIENT_URL || 'https://subash-portfolio.zeabur.app',
+        process.env.ZEABUR_URL || 'https://subash-portfolio.zeabur.app',
+        process.env.GITHUB_PAGES_URL || 'https://subash-s-66.github.io',
+        process.env.BACKEND_URL || 'https://subash-portfolio-backend.onrender.com'
       ],
       styleSrcElem: [
         "'self'",
         "https://fonts.googleapis.com",
-        process.env.CLIENT_URL || 'https://subash-portfolio.zeabur.app'
+        process.env.CLIENT_URL || 'https://subash-portfolio.zeabur.app',
+        process.env.ZEABUR_URL || 'https://subash-portfolio.zeabur.app',
+        process.env.GITHUB_PAGES_URL || 'https://subash-s-66.github.io',
+        process.env.BACKEND_URL || 'https://subash-portfolio-backend.onrender.com'
       ],
       // Allow scripts from self; keep unsafe-inline/eval to support some libs if needed
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
       imgSrc: ["'self'", "data:", "https:"],
       // Allow API connections from the app origin (Zeabur) and any configured API URL
-      connectSrc: ["'self'", process.env.API_URL || process.env.CLIENT_URL || 'https://subash-portfolio.zeabur.app'],
+      connectSrc: [
+        "'self'",
+        process.env.API_URL || process.env.CLIENT_URL || 'https://subash-portfolio.zeabur.app',
+        process.env.ZEABUR_URL || 'https://subash-portfolio.zeabur.app',
+        process.env.BACKEND_URL || 'https://subash-portfolio-backend.onrender.com'
+      ],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       objectSrc: ["'none'"],
       mediaSrc: ["'self'"],
