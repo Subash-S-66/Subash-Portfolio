@@ -14,12 +14,10 @@ ARG VITE_API_BASE
 ENV VITE_API_BASE=${VITE_API_BASE}
 
 # Install frontend dependencies
-WORKDIR /src/frontend
-RUN npm ci --no-audit --no-fund
+RUN cd frontend && npm ci --no-audit --no-fund
 
-# Make Vite executable and build using the root-installed Vite binary
-RUN if [ -d "/src/node_modules/.bin" ]; then chmod -R a+rx /src/node_modules/.bin || true; fi
-RUN node /src/node_modules/vite/bin/vite.js build
+# Build frontend
+RUN npm run build
 
 
 ### --------- BACKEND RUNTIME STAGE ---------
