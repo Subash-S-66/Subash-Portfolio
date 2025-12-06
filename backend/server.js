@@ -52,7 +52,7 @@ const contactLimiter = rateLimit({
 })
 
 // Resend email configuration
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 // Nodemailer transporter (if SMTP env vars are provided)
 let smtpTransporter = null
@@ -70,6 +70,8 @@ if (usingSMTP) {
 }
 
 const sendEmailWithResend = async (to, subject, html, replyTo = null) => {
+  if (!resend) throw new Error('Resend API key not configured')
+
   try {
     const emailData = {
       from: 'Portfolio Contact <onboarding@resend.dev>',
