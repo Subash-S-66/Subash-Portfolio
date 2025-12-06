@@ -1,23 +1,27 @@
 ### Multi-stage Dockerfile: build frontend then run backend in same container
 ## Build stage (install deps at root and build frontend)
 FROM node:18-alpine AS builder
-WORKDIR /app
+# Use /src as build path (matches many build environments)
+WORKDIR /src
 
-# Copy root package files and install dependencies (includes dev deps needed for Vite)
+# Copy root package files. We'll install project-level deps if needed.
 COPY package.json package-lock.json* ./
 RUN npm ci --no-audit --no-fund
 
-# Copy frontend source
+# Copy frontend source into /src/frontend
 COPY frontend ./frontend
 
 # Allow passing API base at build time
 ARG VITE_API_BASE
 ENV VITE_API_BASE=${VITE_API_BASE}
 
-# Ensure bin scripts are executable and run Vite from the installed binary
-WORKDIR /app/frontend
-RUN if [ -d "/app/node_modules/.bin" ]; then chmod -R a+rx /app/node_modules/.bin || true; fi
-RUN node /app/node_modules/vite/bin/vite.js build
+# Move into frontend and install frontend-specific dependencies (ensures vite is present in frontend/node_modules)
+WORKDIR /src/frontend
+RUN npm ci --no-audit --no-fund
+
+# Ensure local bin scripts are executable and run Vite from the frontend node_modules
+RUN if [ -d "node_modules/.bin" ]; then chmod -R a+rx node_modules/.bin || true; fi
+RUN node node_modules/vite/bin/vite.js build
 
 ## Runtime stage (backend)
 FROM node:18-alpine AS runtime
