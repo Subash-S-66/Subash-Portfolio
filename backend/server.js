@@ -237,23 +237,111 @@ app.post('/api/contact',
         </div>
       `
 
-      // Auto-reply HTML (friendly, professional template)
+      // Auto-reply HTML (professional, branded template)
       const autoReplyHtml = `
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; max-width:700px;margin:0 auto;">
-          <div style="background:linear-gradient(90deg,#6d28d9,#ec4899);padding:24px;border-radius:8px;color:#fff;text-align:center;">
-            <h2 style="margin:0;font-size:20px;">Thanks for contacting Subash</h2>
-            <p style="margin:6px 0 0 0;opacity:0.95">I've received your message and will get back to you soon.</p>
-          </div>
-          <div style="background:#fff;padding:20px;border:1px solid #eef2ff;border-radius:8px;margin-top:16px;color:#0f172a;">
-            <p style="margin:0 0 8px 0"><strong>Subject:</strong> ${subject}</p>
-            <p style="margin:0 0 12px 0"><strong>Message:</strong></p>
-            <div style="color:#475569;line-height:1.6;border-left:4px solid #eef2ff;padding-left:12px;margin-bottom:12px;">
-              ${message.replace(/\n/g, '<br>')}
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Thank you for contacting Subash</title>
+          <style>
+            body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8fafc; }
+            .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; color: white; }
+            .header h1 { margin: 0; font-size: 28px; font-weight: 600; }
+            .header p { margin: 10px 0 0 0; font-size: 16px; opacity: 0.9; }
+            .content { padding: 40px 30px; }
+            .message-summary { background-color: #f8fafc; border-left: 4px solid #667eea; padding: 20px; margin: 20px 0; border-radius: 4px; }
+            .message-summary h3 { margin: 0 0 10px 0; color: #1a202c; font-size: 18px; }
+            .message-summary p { margin: 5px 0; color: #4a5568; }
+            .message-content { background-color: #f7fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #e2e8f0; }
+            .message-content h4 { margin: 0 0 15px 0; color: #2d3748; font-size: 16px; }
+            .message-text { color: #4a5568; line-height: 1.6; white-space: pre-line; }
+            .response-info { background-color: #ebf8ff; border: 1px solid #90cdf4; border-radius: 8px; padding: 20px; margin: 20px 0; }
+            .response-info h4 { margin: 0 0 10px 0; color: #2b6cb0; font-size: 16px; }
+            .response-info p { margin: 0; color: #2c5282; line-height: 1.5; }
+            .contact-options { background-color: #f0fff4; border: 1px solid #9ae6b4; border-radius: 8px; padding: 20px; margin: 20px 0; }
+            .contact-options h4 { margin: 0 0 15px 0; color: #22543d; font-size: 16px; }
+            .contact-links { margin: 15px 0; }
+            .contact-links a { display: inline-block; margin: 5px 10px 5px 0; padding: 8px 16px; background-color: #667eea; color: white; text-decoration: none; border-radius: 6px; font-size: 14px; }
+            .contact-links a:hover { background-color: #5a67d8; }
+            .footer { background-color: #2d3748; color: #a0aec0; padding: 30px; text-align: center; font-size: 14px; }
+            .footer h5 { margin: 0 0 10px 0; color: #e2e8f0; font-size: 16px; }
+            .footer p { margin: 5px 0; }
+            .social-links { margin: 15px 0; }
+            .social-links a { display: inline-block; margin: 0 8px; color: #a0aec0; text-decoration: none; font-size: 18px; }
+            .social-links a:hover { color: #667eea; }
+            .divider { border-top: 1px solid #e2e8f0; margin: 20px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <!-- Header -->
+            <div class="header">
+              <h1>Thank You for Reaching Out!</h1>
+              <p>I've received your message and appreciate you taking the time to connect.</p>
             </div>
-            <p style="margin:0;color:#334155;">If you need a faster reply, you can reply to this email or reach me at <strong>${process.env.EMAIL_TO || process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com'}</strong>.</p>
+
+            <!-- Content -->
+            <div class="content">
+              <div class="message-summary">
+                <h3>Message Summary</h3>
+                <p><strong>Subject:</strong> ${subject}</p>
+                <p><strong>Received:</strong> ${new Date().toLocaleString('en-US', { 
+                  weekday: 'long', 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}</p>
+              </div>
+
+              <div class="message-content">
+                <h4>Your Message</h4>
+                <div class="message-text">${message.replace(/\n/g, '<br>')}</div>
+              </div>
+
+              <div class="response-info">
+                <h4>Response Time</h4>
+                <p>I typically respond to all messages within 24-48 hours. For urgent inquiries, feel free to follow up on this email.</p>
+              </div>
+
+              <div class="contact-options">
+                <h4>Alternative Ways to Connect</h4>
+                <p>While you wait for my response, you can also reach me through:</p>
+                <div class="contact-links">
+                  <a href="https://www.linkedin.com/in/subash-s-514aa9373" target="_blank">LinkedIn</a>
+                  <a href="https://github.com/Subash-S-66" target="_blank">GitHub</a>
+                  <a href="mailto:${process.env.EMAIL_TO || process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com'}">Direct Email</a>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <p style="color: #4a5568; text-align: center; margin: 20px 0;">
+                Looking forward to connecting with you soon!
+              </p>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+              <h5>Subash S</h5>
+              <p>Full Stack Developer | B.Tech Computer Science Student</p>
+              <p>Dr. M.G.R. Educational and Research Institute, Chennai</p>
+              <div class="social-links">
+                <a href="https://github.com/Subash-S-66" target="_blank">GitHub</a> |
+                <a href="https://www.linkedin.com/in/subash-s-514aa9373" target="_blank">LinkedIn</a> |
+                <a href="mailto:${process.env.EMAIL_TO || process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com'}">Email</a>
+              </div>
+              <p style="font-size: 12px; margin-top: 20px; color: #718096;">
+                This is an automated response. Please do not reply to this email directly.
+              </p>
+            </div>
           </div>
-          <footer style="text-align:center;margin-top:14px;color:#94a3b8;font-size:12px;">— Subash | Full Stack Developer</footer>
-        </div>
+        </body>
+        </html>
       `
 
       // Where to send the admin notification
