@@ -218,126 +218,63 @@ app.post('/api/contact',
 
       // Build main notification HTML
       const mainEmailHtml = `
-        <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto;">
-          <h2 style="color: #0ea5e9;">New Contact Form Submission</h2>
-          <div style="background-color: #f8fafc; padding: 18px; border-radius: 8px; margin: 18px 0;">
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Subject:</strong> ${subject}</p>
-          </div>
-          <div style="background-color: #ffffff; padding: 18px; border: 1px solid #e2e8f0; border-radius: 8px;">
-            <h3 style="color: #334155; margin-top: 0;">Message</h3>
-            <p style="line-height: 1.6; color: #475569;">${message.replace(/\n/g, '<br>')}</p>
-          </div>
-          <div style="margin-top: 18px; padding: 14px; background-color: #f0f9ff; border-radius: 8px; border-left: 4px solid #0ea5e9;">
-            <p style="margin: 0; color: #0369a1; font-size: 13px;">
-              Received: ${new Date().toLocaleString()}
-            </p>
-          </div>
-        </div>
-      `
-
-      // Auto-reply HTML (professional, branded template)
-      const autoReplyHtml = `
         <!DOCTYPE html>
         <html lang="en">
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Thank you for contacting Subash</title>
+          <title>New Contact Form Submission</title>
           <style>
             body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8fafc; }
-            .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; color: white; }
-            .header h1 { margin: 0; font-size: 28px; font-weight: 600; }
-            .header p { margin: 10px 0 0 0; font-size: 16px; opacity: 0.9; }
-            .content { padding: 40px 30px; }
-            .message-summary { background-color: #f8fafc; border-left: 4px solid #667eea; padding: 20px; margin: 20px 0; border-radius: 4px; }
-            .message-summary h3 { margin: 0 0 10px 0; color: #1a202c; font-size: 18px; }
-            .message-summary p { margin: 5px 0; color: #4a5568; }
-            .message-content { background-color: #f7fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #e2e8f0; }
-            .message-content h4 { margin: 0 0 15px 0; color: #2d3748; font-size: 16px; }
-            .message-text { color: #4a5568; line-height: 1.6; white-space: pre-line; }
-            .response-info { background-color: #ebf8ff; border: 1px solid #90cdf4; border-radius: 8px; padding: 20px; margin: 20px 0; }
-            .response-info h4 { margin: 0 0 10px 0; color: #2b6cb0; font-size: 16px; }
-            .response-info p { margin: 0; color: #2c5282; line-height: 1.5; }
-            .contact-options { background-color: #f0fff4; border: 1px solid #9ae6b4; border-radius: 8px; padding: 20px; margin: 20px 0; }
-            .contact-options h4 { margin: 0 0 15px 0; color: #22543d; font-size: 16px; }
-            .contact-links { margin: 15px 0; }
-            .contact-links a { display: inline-block; margin: 5px 10px 5px 0; padding: 8px 16px; background-color: #667eea; color: white; text-decoration: none; border-radius: 6px; font-size: 14px; }
-            .contact-links a:hover { background-color: #5a67d8; }
-            .footer { background-color: #2d3748; color: #a0aec0; padding: 30px; text-align: center; font-size: 14px; }
-            .footer h5 { margin: 0 0 10px 0; color: #e2e8f0; font-size: 16px; }
-            .footer p { margin: 5px 0; }
-            .social-links { margin: 15px 0; }
-            .social-links a { display: inline-block; margin: 0 8px; color: #a0aec0; text-decoration: none; font-size: 18px; }
-            .social-links a:hover { color: #667eea; }
-            .divider { border-top: 1px solid #e2e8f0; margin: 20px 0; }
+            .container { max-width: 700px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+            .header { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); padding: 30px; text-align: center; color: white; }
+            .header h2 { margin: 0; font-size: 24px; font-weight: 600; }
+            .header p { margin: 8px 0 0 0; font-size: 14px; opacity: 0.9; }
+            .content { padding: 30px; }
+            .contact-info { background-color: #f8fafc; border-left: 4px solid #0ea5e9; padding: 20px; margin: 20px 0; border-radius: 8px; }
+            .contact-info h3 { margin: 0 0 15px 0; color: #1a202c; font-size: 18px; }
+            .contact-info p { margin: 8px 0; color: #4a5568; font-size: 14px; }
+            .contact-info strong { color: #2d3748; }
+            .message-section { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 20px 0; }
+            .message-section h3 { margin: 0 0 15px 0; color: #334155; font-size: 16px; }
+            .message-text { color: #475569; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word; }
+            .timestamp { background-color: #f0f9ff; border: 1px solid #90cdf4; border-radius: 8px; padding: 15px; margin: 20px 0; }
+            .timestamp p { margin: 0; color: #0369a1; font-size: 13px; text-align: center; }
+            .footer { background-color: #2d3748; color: #a0aec0; padding: 20px; text-align: center; font-size: 12px; }
           </style>
         </head>
         <body>
           <div class="container">
-            <!-- Header -->
             <div class="header">
-              <h1>Thank You for Reaching Out!</h1>
-              <p>I've received your message and appreciate you taking the time to connect.</p>
+              <h2>New Contact Form Submission</h2>
+              <p>You have received a new message from your portfolio website</p>
             </div>
-
-            <!-- Content -->
             <div class="content">
-              <div class="message-summary">
-                <h3>Message Summary</h3>
+              <div class="contact-info">
+                <h3>Contact Information</h3>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> <a href="mailto:${email}" style="color: #0ea5e9; text-decoration: none;">${email}</a></p>
                 <p><strong>Subject:</strong> ${subject}</p>
-                <p><strong>Received:</strong> ${new Date().toLocaleString('en-US', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })}</p>
               </div>
-
-              <div class="message-content">
-                <h4>Your Message</h4>
+              <div class="message-section">
+                <h3>Message</h3>
                 <div class="message-text">${message.replace(/\n/g, '<br>')}</div>
               </div>
-
-              <div class="response-info">
-                <h4>Response Time</h4>
-                <p>I typically respond to all messages within 24-48 hours. For urgent inquiries, feel free to follow up on this email.</p>
+              <div class="timestamp">
+                <p><strong>Received:</strong> ${new Date().toLocaleString('en-US', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                  timeZoneName: 'short'
+                })}</p>
               </div>
-
-              <div class="contact-options">
-                <h4>Alternative Ways to Connect</h4>
-                <p>While you wait for my response, you can also reach me through:</p>
-                <div class="contact-links">
-                  <a href="https://www.linkedin.com/in/subash-s-514aa9373" target="_blank">LinkedIn</a>
-                  <a href="https://github.com/Subash-S-66" target="_blank">GitHub</a>
-                  <a href="mailto:${process.env.EMAIL_TO || process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com'}">Direct Email</a>
-                </div>
-              </div>
-
-              <div class="divider"></div>
-
-              <p style="color: #4a5568; text-align: center; margin: 20px 0;">
-                Looking forward to connecting with you soon!
-              </p>
             </div>
-
-            <!-- Footer -->
             <div class="footer">
-              <h5>Subash S</h5>
-              <p>Full Stack Developer | B.Tech Computer Science Student</p>
-              <p>Dr. M.G.R. Educational and Research Institute, Chennai</p>
-              <div class="social-links">
-                <a href="https://github.com/Subash-S-66" target="_blank">GitHub</a> |
-                <a href="https://www.linkedin.com/in/subash-s-514aa9373" target="_blank">LinkedIn</a> |
-                <a href="mailto:${process.env.EMAIL_TO || process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com'}">Email</a>
-              </div>
-              <p style="font-size: 12px; margin-top: 20px; color: #718096;">
-                This is an automated response. Please do not reply to this email directly.
-              </p>
+              <p>This notification was sent from your portfolio contact form.</p>
             </div>
           </div>
         </body>
@@ -347,35 +284,21 @@ app.post('/api/contact',
       // Where to send the admin notification
       const notificationEmail = process.env.EMAIL_TO || process.env.NOTIFICATION_EMAIL || 'subash.93450@gmail.com'
 
-      // Send using SMTP if configured, otherwise try Resend
+      // Send notification to admin using SMTP if configured, otherwise try Resend
       if (usingSMTP) {
         // Send notification to admin
         await sendEmailWithSMTP(notificationEmail, `Portfolio Contact: ${subject}`, mainEmailHtml, email)
-        // Send auto-reply to sender
-        try {
-          await sendEmailWithSMTP(email, `Thanks for contacting Subash`, autoReplyHtml, notificationEmail)
-        } catch (err) {
-          console.warn('Auto-reply failed (SMTP):', err.message)
-        }
       } else if (process.env.RESEND_API_KEY) {
         // Send notification via Resend
         await sendEmailWithResend(notificationEmail, `Portfolio Contact: ${subject}`, mainEmailHtml, email)
-        // Send auto-reply via Resend
-        try {
-          await sendEmailWithResend(email, `Thanks for contacting Subash`, autoReplyHtml, notificationEmail)
-        } catch (err) {
-          console.warn('Auto-reply failed (Resend):', err.message)
-        }
       } else {
-        return res.status(500).json({
-          success: false,
-          message: 'Email service not configured. Please contact me directly.'
-        })
+        console.log('No email service configured. Message received but not sent via email.')
+        console.log('Name:', name, 'Email:', email, 'Subject:', subject, 'Message:', message)
       }
 
       res.json({
         success: true,
-        message: 'Message sent successfully! I\'ll get back to you soon.'
+        message: 'Message received! I\'ll get back to you soon. You can also use the email template in backend/email-template.html for manual replies.'
       })
 
     } catch (error) {
