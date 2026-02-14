@@ -1,390 +1,310 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
-import { ExternalLink, Github, Code, Database, Palette, Zap, Star, Rocket, Download } from 'lucide-react'
+import { ArrowUpRight, Code, Database, Download, ExternalLink, Github, Sparkles, Zap } from 'lucide-react'
 
-// Move data outside component to prevent recreation on every render
 const projects = [
-    {
-      id: 1,
-      title: 'BOLT & BROOK - E-COMMERCE WEBSITE',
-      role: 'FULL-STACK DEVELOPER (FRONTEND, BACKEND & DATABASE)',
-      date: '2025-2026',
-      description: 'Developed a full-stack e-commerce website for selling dresses with integrated Razorpay payment gateway (test mode).',
-      features: [
-        'Role-based login system (Admin & Customer) to control access to product management, orders, and user accounts',
-        'Clean, mobile-friendly UI using Tailwind CSS for smooth shopping experience',
-        'Built backend APIs using Node.js and Express.js to handle user roles, product data, and orders with MySQL'
-      ],
-      techStack: ['React.js', 'Node.js', 'Express.js', 'Tailwind CSS', 'MySQL', 'Razorpay (Test)'],
-      category: 'Full Stack',
-      icon: Code,
-      gradient: 'from-blue-500 to-purple-600',
-      accentColor: 'from-cyan-400 to-blue-500',
-      bgPattern: 'from-blue-100 to-purple-100',
-      liveDemo: 'https://stage.boltandbrook.com/'
-    },
-    {
-      id: 2,
-      title: 'SERVIFY - FREELANCE BIDDING PLATFORM',
-      role: 'Full Stack',
-      date: '2024-2025',
-      description: 'Developed a real-time freelance bidding platform enabling clients to post projects and freelancers to place competitive bids.',
-      features: [
-        'Built interactive dashboards and responsive product listings using React.js and CSS',
-        'Real-time bidding system for project management',
-        'User-friendly interface for both clients and freelancers'
-      ],
-      techStack: ['MongoDB', 'Express.js', 'React.js', 'Node.js'],
-      category: 'Frontend',
-      icon: Database,
-      gradient: 'from-green-500 to-teal-600',
-      accentColor: 'from-emerald-400 to-green-500',
-      bgPattern: 'from-green-100 to-teal-100',
-      liveDemo: 'https://servify.zeabur.app/'
-    },
-    {
-      id: 3,
-      title: 'EXPENSE TRACKING SYSTEM',
-      role: 'FULL-STACK DEVELOPER (FRONTEND, BACKEND & DATABASE)',
-      date: '2025-2026',
-      description: 'Developed a full-stack Expense Tracker to simplify personal finance management by logging SMS-based transactions, loans, and salary data.',
-      features: [
-        'Built Flask APIs to extract transaction amounts from SMS using regex, manage loans, and aggregate data',
-        'Designed responsive React UI with Tailwind CSS and visualized expenses using Recharts',
-        'Enabled dynamic filtering and real-time updates for seamless expense monitoring'
-      ],
-      techStack: ['React.js', 'Flask', 'Python', 'Tailwind CSS', 'Recharts'],
-      category: 'Full Stack',
-      icon: Zap,
-      gradient: 'from-orange-500 to-red-600',
-      accentColor: 'from-yellow-400 to-orange-500',
-      bgPattern: 'from-orange-100 to-red-100',
-      liveDemo: 'https://subash-s-66.github.io/expense-tracking-system/',
-      apkDownloads: [
-        {
-          label: 'Expense Tracker',
-          fileName: 'Expense Tracker.apk',
-          url: '/apk/Expense%20Tracker.apk'
-        }
-      ]
-    },
-    {
-      id: 4,
-      title: 'FAIRSHARE',
-      role: 'FULL-STACK DEVELOPER (WEB + MOBILE)',
-      date: '2025-2026',
-      description: 'Built a full-stack debt management app to track shared expenses, direct lending, and settlements across web and mobile platforms.',
-      features: [
-        'Implemented JWT-based authentication with registration, login, and password reset flows',
-        'Developed split-bill and direct-lend workflows with partial payments, settlement tracking, and friend-wise debt summaries',
-        'Added automated email reminders with configurable frequency, notification time, and timezone support'
-      ],
-      techStack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Node.js', 'Express.js', 'MongoDB', 'JWT', 'Capacitor'],
-      category: 'Full Stack',
-      icon: Database,
-      gradient: 'from-indigo-500 to-cyan-600',
-      accentColor: 'from-sky-400 to-indigo-500',
-      bgPattern: 'from-indigo-100 to-cyan-100',
-      liveDemo: 'https://subash-s-66.github.io/FairSplit/',
-      apkDownloads: [
-        {
-          label: 'Fair Split',
-          fileName: 'Fair Split.apk',
-          url: '/apk/Fair%20Split.apk'
-        }
-      ]
-    },
-    {
-      id: 5,
-      title: 'REAL-TIME INDIAN SIGN LANGUAGE TO TEXT TRANSLATOR',
-      role: 'AI/ML + FULL-STACK DEVELOPER',
-      date: '2025-2026',
-      description: 'Built a real-time AI system that translates Indian Sign Language gestures from webcam video into text using a temporal deep learning pipeline.',
-      features: [
-        'Implemented live video streaming from React to FastAPI using WebSocket for low-latency inference',
-        'Extracted hand and pose landmarks with MediaPipe, created sliding windows, and ran ONNX LSTM inference with confidence stabilization',
-        'Designed end-to-end training and deployment flow with CISLR preprocessing, PyTorch training, and ONNX Runtime serving'
-      ],
-      techStack: ['React', 'Tailwind CSS', 'FastAPI', 'WebSocket', 'MediaPipe', 'PyTorch', 'LSTM', 'ONNX', 'ONNX Runtime'],
-      category: 'Full Stack',
-      icon: Zap,
-      gradient: 'from-fuchsia-500 to-rose-600',
-      accentColor: 'from-pink-400 to-fuchsia-500',
-      bgPattern: 'from-fuchsia-100 to-rose-100'
-    }
-  ]
+  {
+    id: 1,
+    title: 'BOLT & BROOK - E-COMMERCE WEBSITE',
+    role: 'FULL-STACK DEVELOPER (FRONTEND, BACKEND & DATABASE)',
+    date: '2025-2026',
+    description:
+      'Developed a full-stack e-commerce website for selling dresses with integrated Razorpay payment gateway (test mode).',
+    features: [
+      'Role-based login system (Admin & Customer) for products, orders, and account operations',
+      'Clean mobile-friendly UI built with Tailwind CSS for frictionless shopping',
+      'REST APIs using Node.js and Express.js with MySQL-backed data flow',
+    ],
+    techStack: ['React.js', 'Node.js', 'Express.js', 'Tailwind CSS', 'MySQL', 'Razorpay (Test)'],
+    category: 'Full Stack',
+    icon: Code,
+    gradient: 'from-sky-500/75 via-blue-500/70 to-indigo-500/75',
+    accentColor: 'text-cyan-200',
+    liveDemo: 'https://stage.boltandbrook.com/',
+  },
+  {
+    id: 2,
+    title: 'SERVIFY - FREELANCE BIDDING PLATFORM',
+    role: 'FULL-STACK PROJECT',
+    date: '2024-2025',
+    description:
+      'Developed a real-time freelance bidding platform enabling clients to post projects and freelancers to place competitive bids.',
+    features: [
+      'Interactive dashboards and responsive listings for project discovery',
+      'Real-time bidding interactions for competitive proposal flow',
+      'Designed UX for both clients and freelancers to reduce friction',
+    ],
+    techStack: ['MongoDB', 'Express.js', 'React.js', 'Node.js'],
+    category: 'Full Stack',
+    icon: Database,
+    gradient: 'from-emerald-500/75 via-teal-500/70 to-cyan-500/75',
+    accentColor: 'text-emerald-200',
+    liveDemo: 'https://servify.zeabur.app/',
+  },
+  {
+    id: 3,
+    title: 'EXPENSE TRACKING SYSTEM',
+    role: 'FULL-STACK DEVELOPER (FRONTEND, BACKEND & DATABASE)',
+    date: '2025-2026',
+    description:
+      'Developed a full-stack Expense Tracker to simplify personal finance management by logging SMS-based transactions, loans, and salary data.',
+    features: [
+      'Flask APIs for SMS regex extraction, loan handling, and summary aggregation',
+      'Responsive React UI with Tailwind CSS and charts using Recharts',
+      'Dynamic filters and real-time update experience for daily monitoring',
+    ],
+    techStack: ['React.js', 'Flask', 'Python', 'Tailwind CSS', 'Recharts'],
+    category: 'Full Stack',
+    icon: Zap,
+    gradient: 'from-orange-500/75 via-rose-500/70 to-pink-500/75',
+    accentColor: 'text-orange-200',
+    liveDemo: 'https://subash-s-66.github.io/expense-tracking-system/',
+    apkDownloads: [
+      {
+        label: 'Expense Tracker',
+        fileName: 'Expense Tracker.apk',
+        url: '/apk/Expense%20Tracker.apk',
+      },
+    ],
+  },
+  {
+    id: 4,
+    title: 'FAIRSHARE',
+    role: 'FULL-STACK DEVELOPER (WEB + MOBILE)',
+    date: '2025-2026',
+    description:
+      'Built a debt-management product to track split bills, direct lends, settlements, and reminder workflows across web and mobile.',
+    features: [
+      'JWT auth flow with sign-up, login, and password reset support',
+      'Split-bill and direct-lend workflows with partial payment tracking',
+      'Automated reminder system with frequency and timezone controls',
+    ],
+    techStack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Node.js', 'Express.js', 'MongoDB', 'JWT', 'Capacitor'],
+    category: 'Full Stack',
+    icon: Database,
+    gradient: 'from-violet-500/75 via-indigo-500/70 to-cyan-500/75',
+    accentColor: 'text-violet-200',
+    liveDemo: 'https://subash-s-66.github.io/FairSplit/',
+    apkDownloads: [
+      {
+        label: 'Fair Split',
+        fileName: 'Fair Split.apk',
+        url: '/apk/Fair%20Split.apk',
+      },
+    ],
+  },
+  {
+    id: 5,
+    title: 'REAL-TIME INDIAN SIGN LANGUAGE TO TEXT TRANSLATOR',
+    role: 'AI/ML + FULL-STACK DEVELOPER',
+    date: '2025-2026',
+    description:
+      'Built a real-time AI system that translates Indian Sign Language gestures from webcam video into text using a temporal deep learning pipeline.',
+    features: [
+      'Live stream inference flow from React client to FastAPI backend using WebSocket',
+      'MediaPipe keypoint extraction + ONNX LSTM inference with stabilization logic',
+      'PyTorch training pipeline and ONNX Runtime deployment for production inference',
+    ],
+    techStack: ['React', 'Tailwind CSS', 'FastAPI', 'WebSocket', 'MediaPipe', 'PyTorch', 'LSTM', 'ONNX', 'ONNX Runtime'],
+    category: 'Full Stack',
+    icon: Zap,
+    gradient: 'from-fuchsia-500/75 via-pink-500/70 to-rose-500/75',
+    accentColor: 'text-fuchsia-200',
+  },
+]
 
-const Projects = () => {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
+const downloadApkFiles = (apkDownloads) => {
+  if (!apkDownloads?.length) return
+
+  const appList = apkDownloads.map((apk) => `- ${apk.label}`).join('\n')
+  const title = apkDownloads.length > 1 ? 'Download Android apps?' : 'Download Android app?'
+  const shouldDownload = window.confirm(`${title}\n\n${appList}`)
+
+  if (!shouldDownload) return
+
+  apkDownloads.forEach((apk) => {
+    const link = document.createElement('a')
+    link.href = apk.url
+    link.download = apk.fileName
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
   })
+}
 
-  const getCategoryIcon = (category) => {
-    switch (category) {
-      case 'Frontend':
-        return Palette
-      case 'Backend':
-        return Database
-      case 'Full Stack':
-        return Code
-      default:
-        return Code
-    }
+const ProjectCard = ({ project, index }) => {
+  const [tilt, setTilt] = useState({ x: 0, y: 0 })
+
+  const cardStyle = useMemo(
+    () => ({
+      transform: `perspective(1100px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+      transformStyle: 'preserve-3d',
+    }),
+    [tilt]
+  )
+
+  const handleMouseMove = (event) => {
+    const bounds = event.currentTarget.getBoundingClientRect()
+    const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 8
+    const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * -8
+    setTilt({ x: Number(y.toFixed(2)), y: Number(x.toFixed(2)) })
   }
 
-  const handleApkDownload = (apkDownloads) => {
-    if (!apkDownloads?.length) return
-
-    const appList = apkDownloads.map((apk) => `- ${apk.label}`).join('\n')
-    const titleText = apkDownloads.length > 1 ? 'Download Android apps?' : 'Download Android app?'
-    const shouldDownload = window.confirm(
-      `${titleText}\n\n${appList}`
-    )
-
-    if (!shouldDownload) return
-
-    apkDownloads.forEach((apk) => {
-      const link = document.createElement('a')
-      link.href = apk.url
-      link.download = apk.fileName
-      document.body.appendChild(link)
-      link.click()
-      link.remove()
-    })
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 })
   }
 
   return (
-    <section id="projects" className="section-padding bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
-      <div className="container-custom">
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 50 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 sm:mb-6 px-2">
-            My <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent">Projects</span>
-          </h2>
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4 leading-relaxed">
-            Here are some of the projects I've worked on, showcasing my skills in full-stack development, 
-            UI/UX design, and problem-solving abilities.
-          </p>
-        </motion.div>
+    <motion.article
+      data-reveal
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ duration: 0.7, delay: index * 0.06 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={cardStyle}
+      className="glass-panel group relative overflow-hidden p-6 sm:p-8"
+    >
+      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-20`} />
+      <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100">
+        <div className="absolute -left-16 top-6 h-20 w-20 rounded-full bg-white/20 blur-2xl" />
+      </div>
 
-        <div className="grid lg:grid-cols-1 gap-8">
-          {projects.map((project, index) => (
+      <div className="relative grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+        <div>
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-slate-300">
+              <Sparkles className="h-3.5 w-3.5" />
+              {project.category}
+            </span>
+            <span className="text-xs uppercase tracking-[0.18em] text-slate-400">{project.date}</span>
+          </div>
+
+          <h3 className="font-['Space_Grotesk'] text-2xl font-bold text-white sm:text-3xl">{project.title}</h3>
+          <p className={`mt-2 text-sm font-semibold uppercase tracking-[0.16em] ${project.accentColor}`}>{project.role}</p>
+          <p className="mt-4 leading-relaxed text-slate-300">{project.description}</p>
+
+          <ul className="mt-6 space-y-3 text-sm text-slate-300">
+            {project.features.map((feature) => (
+              <li key={feature} className="flex items-start gap-3">
+                <span className="mt-1.5 inline-block h-2 w-2 rounded-full bg-cyan-300" />
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            {project.techStack.map((tech) => (
+              <motion.span
+                key={tech}
+                whileHover={{ y: -2, scale: 1.03 }}
+                className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-slate-100"
+              >
+                {tech}
+              </motion.span>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col justify-between">
+          <div className="relative h-52 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50">
+            <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-70`} />
             <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: index * 0.2 }}
-              className={`bg-gradient-to-r ${project.bgPattern} p-3 sm:p-4 md:p-6 lg:p-8 rounded-2xl shadow-xl border border-white/50 backdrop-blur-sm`}
-              whileHover={{ scale: 1.02, y: -5 }}
-            >
-              <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
-                {/* Project Info */}
-                <div className="lg:col-span-2 space-y-6">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0">
-                    <div className="flex items-center space-x-3">
-                      <motion.div 
-                        className={`p-3 sm:p-4 rounded-xl bg-gradient-to-r ${project.gradient} shadow-lg`}
-                        whileHover={{ rotate: 5, scale: 1.1 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <project.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
-                      </motion.div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-800 leading-tight break-words">{project.title}</h3>
-                        <p className={`text-sm sm:text-base bg-gradient-to-r ${project.accentColor} bg-clip-text text-transparent font-medium`}>
-                          {project.role}
-                        </p>
-                        {project.date && (
-                          <p className="text-xs text-gray-500 mt-1 font-medium">
-                            {project.date}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    <motion.span 
-                      className={`px-3 py-1 sm:px-4 sm:py-2 bg-gradient-to-r ${project.gradient} text-white rounded-full text-xs sm:text-sm font-medium shadow-md self-start sm:self-auto`}
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      {project.category}
-                    </motion.span>
-                  </div>
-
-                  <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-                    {project.description}
-                  </p>
-
-                  <div>
-                    <h4 className="font-semibold text-gray-800 mb-2 sm:mb-3 flex items-center text-sm sm:text-base md:text-lg">
-                      <Star className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-1 sm:mr-2 text-yellow-500" />
-                      Key Features:
-                    </h4>
-                    <ul className="space-y-1 sm:space-y-2">
-                      {project.features.map((feature, featureIndex) => (
-                        <motion.li 
-                          key={featureIndex} 
-                          className="flex items-start space-x-2"
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={inView ? { opacity: 1, x: 0 } : {}}
-                          transition={{ duration: 0.5, delay: index * 0.2 + featureIndex * 0.1 }}
-                        >
-                          <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gradient-to-r ${project.accentColor} rounded-full mt-1.5 sm:mt-2 flex-shrink-0`}></div>
-                          <span className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed">{feature}</span>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-gray-800 mb-2 sm:mb-3 flex items-center text-sm sm:text-base md:text-lg">
-                      <Rocket className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-1 sm:mr-2 text-purple-500" />
-                      Tech Stack:
-                    </h4>
-                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                      {project.techStack.map((tech, techIndex) => (
-                        <motion.span
-                          key={techIndex}
-                          className={`px-2 py-1 sm:px-3 sm:py-1 bg-gradient-to-r ${project.gradient} text-white rounded-full text-sm sm:text-base font-medium shadow-md`}
-                          whileHover={{ scale: 1.1, y: -2 }}
-                          transition={{ type: "spring", stiffness: 400 }}
-                        >
-                          {tech}
-                        </motion.span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Project Visual */}
-                <div className="lg:col-span-1 flex flex-col">
-                  <motion.div 
-                    className={`h-80 bg-gradient-to-br ${project.gradient} rounded-xl flex items-center justify-center relative overflow-hidden shadow-2xl`}
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <div className="text-center text-white">
-                      <motion.div
-                        animate={{ rotate: [0, 5, -5, 0] }}
-                        transition={{ duration: 4, repeat: Infinity }}
-                      >
-                        <project.icon className="h-16 w-16 mx-auto mb-4 opacity-90" />
-                      </motion.div>
-                      <h4 className="text-lg font-semibold mb-2">{project.title.split(' - ')[0]}</h4>
-                      <p className="text-sm opacity-90">{project.category} Project</p>
-                    </div>
-                    {/* Animated decorative elements */}
-                    <motion.div 
-                      className="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded-full"
-                      animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    />
-                    <motion.div 
-                      className="absolute bottom-4 left-4 w-6 h-6 bg-white/20 rounded-full"
-                      animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.8, 0.3] }}
-                      transition={{ duration: 3, repeat: Infinity }}
-                    />
-                    <motion.div 
-                      className="absolute top-1/2 left-4 w-4 h-4 bg-white/20 rounded-full"
-                      animate={{ y: [0, -10, 0], opacity: [0.4, 1, 0.4] }}
-                      transition={{ duration: 2.5, repeat: Infinity }}
-                    />
-                  </motion.div>
-                  
-                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {project.liveDemo ? (
-                      <motion.a
-                        href={project.liveDemo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`flex-1 bg-gradient-to-r ${project.gradient} text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 shadow-lg`}
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                        <span>Live Demo</span>
-                      </motion.a>
-                    ) : (
-                      <motion.button 
-                        className={`flex-1 bg-gradient-to-r ${project.gradient} text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 shadow-lg opacity-50 cursor-not-allowed`}
-                        disabled
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                        <span>Live Demo</span>
-                      </motion.button>
-                    )}
-                    <motion.a
-                      href="https://github.com/Subash-S-66"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 border-2 border-gray-300 text-gray-700 px-4 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 hover:border-gray-400 transition-colors"
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Github className="h-4 w-4" />
-                      <span>Code</span>
-                    </motion.a>
-                    {project.apkDownloads?.length ? (
-                      <motion.button
-                        type="button"
-                        onClick={() => handleApkDownload(project.apkDownloads)}
-                        className={`sm:col-span-2 bg-gradient-to-r ${project.gradient} text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 shadow-lg`}
-                        whileHover={{ scale: 1.02, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <Download className="h-4 w-4" />
-                        <span>
-                          {project.apkDownloads.length === 1
-                            ? `Download ${project.apkDownloads[0].label} APK`
-                            : 'Download Android Apps'}
-                        </span>
-                      </motion.button>
-                    ) : null}
-                  </div>
-                </div>
+              className="absolute -left-32 top-0 h-full w-1/2 -skew-x-12 bg-white/25 blur-2xl"
+              initial={{ x: -120 }}
+              whileHover={{ x: 360 }}
+              transition={{ duration: 1.1, ease: 'easeInOut' }}
+            />
+            <div className="relative flex h-full items-center justify-center">
+              <div className="text-center">
+                <project.icon className="mx-auto h-12 w-12 text-white" />
+                <p className="mt-4 font-['Space_Grotesk'] text-lg font-semibold text-white">Project Preview</p>
               </div>
-            </motion.div>
+            </div>
+          </div>
+
+          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {project.liveDemo ? (
+              <a
+                href={project.liveDemo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-300/40 bg-cyan-500/20 px-4 py-3 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-500/30"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Live Demo
+              </a>
+            ) : (
+              <button
+                type="button"
+                disabled
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-500"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Live Demo
+              </button>
+            )}
+
+            <a
+              href="https://github.com/Subash-S-66"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:border-white/40 hover:bg-white/15"
+            >
+              <Github className="h-4 w-4" />
+              GitHub
+            </a>
+
+            {project.apkDownloads?.length ? (
+              <button
+                type="button"
+                onClick={() => downloadApkFiles(project.apkDownloads)}
+                className="sm:col-span-2 inline-flex items-center justify-center gap-2 rounded-xl border border-violet-300/40 bg-violet-500/25 px-4 py-3 text-sm font-semibold text-violet-100 transition hover:bg-violet-500/30"
+              >
+                <Download className="h-4 w-4" />
+                {project.apkDownloads.length === 1
+                  ? `Download ${project.apkDownloads[0].label} APK`
+                  : 'Download Android Apps'}
+              </button>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    </motion.article>
+  )
+}
+
+const Projects = () => {
+  return (
+    <section id="projects" className="section-padding">
+      <div className="container-custom">
+        <div className="text-center" data-reveal>
+          <h2 className="section-title">
+            Featured <span className="text-gradient">Projects</span>
+          </h2>
+          <p className="section-subtitle">
+            Full-stack builds across fintech, AI, and SaaS experiences. Each project is designed with production-grade
+            architecture and polished UX.
+          </p>
+        </div>
+
+        <div className="mt-14 space-y-8">
+          {projects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
 
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="text-center mt-16"
-        >
-          <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-8 rounded-2xl shadow-xl">
-            <p className="text-lg text-white/90 mb-6">
-              Interested in seeing more of my work?
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.a
-                href="https://github.com/Subash-S-66"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold inline-flex items-center justify-center space-x-2 shadow-lg hover:bg-gray-100 transition-colors"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Github className="h-5 w-5" />
-                <span>View All Projects</span>
-              </motion.a>
-              <motion.a
-                href="#contact"
-                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold inline-flex items-center justify-center hover:bg-white/20 transition-colors"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Let's Discuss Your Project
-              </motion.a>
-            </div>
-          </div>
+        <motion.div data-reveal className="mt-12 text-center">
+          <a
+            href="https://github.com/Subash-S-66"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-cyan-300/40 bg-gradient-to-r from-cyan-500/20 to-violet-500/20 px-6 py-3 font-semibold text-cyan-100 transition hover:scale-[1.02] hover:border-cyan-300/70"
+          >
+            View All Projects
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
         </motion.div>
       </div>
     </section>
@@ -392,3 +312,4 @@ const Projects = () => {
 }
 
 export default Projects
+

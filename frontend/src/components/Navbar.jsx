@@ -1,154 +1,188 @@
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Menu, X, Code2, Sparkles, Star } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Menu, X, Sparkles, ArrowUpRight } from 'lucide-react'
+
+const navItems = [
+  { name: 'Home', href: '#home' },
+  { name: 'About', href: '#about' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Skills', href: '#skills' },
+  { name: 'Contact', href: '#contact' },
+]
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  const navItems = [
-    { name: 'Home', href: '#home', color: 'from-blue-500 to-indigo-500' },
-    { name: 'About', href: '#about', color: 'from-slate-500 to-blue-500' },
-    { name: 'Projects', href: '#projects', color: 'from-cyan-500 to-blue-500' },
-    { name: 'Skills', href: '#skills', color: 'from-indigo-500 to-purple-500' },
-    { name: 'Contact', href: '#contact', color: 'from-blue-600 to-indigo-600' },
-  ]
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('home')
+  const [isScrolled, setIsScrolled] = useState(false)
 
   const scrollToSection = (href) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+    const target = document.querySelector(href)
+    if (!target) return
+
+    const nextSection = href.replace('#', '')
+    setActiveSection(nextSection)
+
+    const lenis = window.__portfolioLenis
+
+    if (lenis) {
+      lenis.scrollTo(target, { offset: -92, duration: 1.1 })
+    } else {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
-    setIsOpen(false)
+
+    setIsMenuOpen(false)
   }
 
+  useEffect(() => {
+    const sections = navItems
+      .map((item) => document.querySelector(item.href))
+      .filter(Boolean)
+
+    const updateNavbarState = () => {
+      const scrollPosition = window.scrollY + 120
+      setIsScrolled(window.scrollY > 20)
+
+      let currentSection = 'home'
+
+      sections.forEach((section) => {
+        if (scrollPosition >= section.offsetTop) {
+          currentSection = section.id
+        }
+      })
+
+      setActiveSection(currentSection)
+    }
+
+    window.addEventListener('scroll', updateNavbarState, { passive: true })
+    window.addEventListener('resize', updateNavbarState)
+    updateNavbarState()
+
+    return () => {
+      window.removeEventListener('scroll', updateNavbarState)
+      window.removeEventListener('resize', updateNavbarState)
+    }
+  }, [])
+
   return (
-    <motion.nav 
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-xl border-b border-gray-200' 
-          : 'bg-transparent backdrop-blur-md border-b-0'
-      }`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.7, ease: 'easeOut' }}
+      className="fixed inset-x-0 top-0 z-50"
     >
-      <div className="container-custom">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <motion.div 
-            className="flex items-center space-x-2"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
+      <div className="container-custom pt-4">
+        <nav
+          className={`rounded-2xl border px-4 py-3 transition-all duration-300 md:px-6 ${
+            isScrolled
+              ? 'border-white/20 bg-slate-900/70 shadow-2xl backdrop-blur-2xl'
+              : 'border-white/10 bg-slate-900/40 backdrop-blur-xl'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={() => scrollToSection('#home')}
+              className="group inline-flex items-center gap-3"
             >
-              <Code2 className={`h-8 w-8 ${scrolled ? 'text-blue-700' : 'text-white'}`} />
-            </motion.div>
-            <span className={`text-xl font-bold ${scrolled ? 'bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent' : 'text-white'}`}>
-              Subash S
-            </span>
-          </motion.div>
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-300/40 bg-slate-900/70 text-cyan-300 shadow-lg">
+                <Sparkles className="h-5 w-5" />
+              </span>
+              <span className="text-left">
+                <span className="block text-xs uppercase tracking-[0.2em] text-slate-400">Portfolio</span>
+                <span className="font-['Space_Grotesk'] text-lg font-semibold text-slate-100">Subash S</span>
+              </span>
+            </button>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
-            {navItems.map((item, index) => (
-              <motion.button
-                key={item.name}
-                onClick={() => scrollToSection(item.href)}
-                className={`${scrolled ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' : 'text-white hover:text-blue-100 hover:bg-white/20'} font-medium transition-colors duration-200 px-4 py-2 rounded-md`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                {item.name}
-              </motion.button>
-            ))}
-            <motion.a
-              href="https://github.com/Subash-S-66/Resume-link/blob/main/Subash%20S%20Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${scrolled ? 'bg-blue-600 hover:bg-blue-700' : 'bg-white/10 hover:bg-white/30 text-white border border-white/30'} text-white px-6 py-2 rounded-full font-medium transition-colors duration-200 flex items-center space-x-2 shadow-sm hover:shadow-md`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-            >
-              <Sparkles className="h-4 w-4" />
-              <span>Resume</span>
-            </motion.a>
-          </div>
+            <div className="hidden items-center gap-2 md:flex">
+              {navItems.map((item) => {
+                const isActive = activeSection === item.href.replace('#', '')
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <motion.button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`${scrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-blue-50' : 'text-white hover:text-blue-100 hover:bg-white/20'} transition-colors duration-200 p-2 rounded-lg backdrop-blur-sm`}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </motion.button>
-          </div>
-        </div>
+                return (
+                  <button
+                    key={item.name}
+                    type="button"
+                    onClick={() => scrollToSection(item.href)}
+                    className={`rounded-xl px-4 py-2 text-sm font-medium transition-all ${
+                      isActive
+                        ? 'bg-white/15 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.2)]'
+                        : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                    }`}
+                  >
+                    {item.name}
+                  </button>
+                )
+              })}
+            </div>
 
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <motion.div 
-            className="md:hidden bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-lg"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="px-4 pt-4 pb-6 space-y-2">
-              {navItems.map((item, index) => (
-                <motion.button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  className="block w-full text-left px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-md transition-colors duration-200"
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  {item.name}
-                </motion.button>
-              ))}
-              <motion.a
+            <div className="hidden md:block">
+              <a
                 href="https://github.com/Subash-S-66/Resume-link/blob/main/Subash%20S%20Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-medium transition-colors duration-200 mt-4 flex items-center justify-center space-x-2 shadow-sm"
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.5 }}
+                className="inline-flex items-center gap-2 rounded-xl border border-cyan-300/40 bg-gradient-to-r from-cyan-500/30 to-violet-500/30 px-4 py-2 text-sm font-semibold text-cyan-100 transition-all hover:scale-[1.03] hover:border-cyan-300/70 hover:from-cyan-500/40 hover:to-violet-500/40"
               >
-                <Sparkles className="h-4 w-4" />
-                <span>Resume</span>
-              </motion.a>
+                Resume
+                <ArrowUpRight className="h-4 w-4" />
+              </a>
             </div>
-          </motion.div>
-        )}
+
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen((prev) => !prev)}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-slate-900/80 text-slate-100 md:hidden"
+              aria-label="Toggle navigation"
+            >
+              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
+
+          <AnimatePresence>
+            {isMenuOpen ? (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="mt-4 overflow-hidden border-t border-white/10 pt-4 md:hidden"
+              >
+                <div className="space-y-2">
+                  {navItems.map((item) => {
+                    const isActive = activeSection === item.href.replace('#', '')
+
+                    return (
+                      <button
+                        key={item.name}
+                        type="button"
+                        onClick={() => scrollToSection(item.href)}
+                        className={`w-full rounded-xl px-4 py-3 text-left text-sm transition ${
+                          isActive
+                            ? 'bg-white/15 text-white'
+                            : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                        }`}
+                      >
+                        {item.name}
+                      </button>
+                    )
+                  })}
+
+                  <a
+                    href="https://github.com/Subash-S-66/Resume-link/blob/main/Subash%20S%20Resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-300/40 bg-gradient-to-r from-cyan-500/30 to-violet-500/30 px-4 py-3 text-sm font-semibold text-cyan-100"
+                  >
+                    Resume
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+        </nav>
       </div>
-    </motion.nav>
+    </motion.header>
   )
 }
 
 export default Navbar
+

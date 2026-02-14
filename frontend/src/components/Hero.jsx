@@ -1,366 +1,248 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronDown, Github, Linkedin, Mail, Phone, MapPin, Sparkles, Code, Palette, Zap } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, Github, Linkedin, Mail, MapPin, Phone } from 'lucide-react'
+
+const roles = [
+  'Full-Stack Developer',
+  'MERN Engineer',
+  'AI Product Builder',
+  'Mobile App Creator',
+]
 
 const Hero = () => {
-  const scrollToAbout = () => {
-    const element = document.querySelector('#about')
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 28 }, (_, index) => ({
+        id: index,
+        size: (index % 4) + 2,
+        x: (index * 13) % 100,
+        y: (index * 17) % 100,
+        delay: (index % 7) * 0.4,
+        duration: 5 + (index % 6),
+      })),
+    []
+  )
+
+  const [typedText, setTypedText] = useState('')
+  const [roleIndex, setRoleIndex] = useState(0)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  useEffect(() => {
+    const currentWord = roles[roleIndex]
+    const shouldPause = !isDeleting && typedText === currentWord
+    const shouldSwitch = isDeleting && typedText === ''
+
+    if (shouldPause) {
+      const pause = setTimeout(() => setIsDeleting(true), 1100)
+      return () => clearTimeout(pause)
+    }
+
+    if (shouldSwitch) {
+      setIsDeleting(false)
+      setRoleIndex((previous) => (previous + 1) % roles.length)
+      return
+    }
+
+    const timeout = setTimeout(
+      () => {
+        const nextText = isDeleting
+          ? currentWord.slice(0, typedText.length - 1)
+          : currentWord.slice(0, typedText.length + 1)
+        setTypedText(nextText)
+      },
+      isDeleting ? 45 : 95
+    )
+
+    return () => clearTimeout(timeout)
+  }, [typedText, roleIndex, isDeleting])
+
+  const smoothScrollTo = (selector) => {
+    const target = document.querySelector(selector)
+    if (!target) return
+
+    const lenis = window.__portfolioLenis
+    if (lenis) {
+      lenis.scrollTo(target, { offset: -88, duration: 1.1 })
+    } else {
+      target.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Professional gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900"></div>
-      
-      {/* Professional floating elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute top-20 left-4 sm:left-10 w-12 h-12 sm:w-16 sm:h-16 bg-blue-500/20 rounded-full"
-          animate={{
-            y: [0, -20, 0],
-            opacity: [0.3, 0.7, 0.3]
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute top-40 right-4 sm:right-20 w-8 h-8 sm:w-12 sm:h-12 bg-indigo-500/20 rounded-full"
-          animate={{
-            y: [0, 20, 0],
-            x: [0, 10, 0]
-          }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-40 left-4 sm:left-20 w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500/20 rounded-full"
-          animate={{
-            y: [0, -15, 0],
-            opacity: [0.2, 0.6, 0.2]
-          }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-4 sm:right-10 w-16 h-16 sm:w-20 sm:h-20 bg-slate-500/20 rounded-full"
-          animate={{
-            y: [0, 25, 0],
-            x: [0, -15, 0]
-          }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-        />
+    <section id="home" className="relative min-h-screen overflow-hidden pb-16 pt-36 md:pt-40">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(43,196,255,0.22),transparent_25%),radial-gradient(circle_at_78%_12%,rgba(147,86,255,0.24),transparent_28%),radial-gradient(circle_at_55%_70%,rgba(59,255,214,0.13),transparent_32%)]" />
+
+        {particles.map((particle) => (
+          <motion.span
+            key={particle.id}
+            className="absolute rounded-full bg-cyan-200/70"
+            style={{
+              width: particle.size,
+              height: particle.size,
+              top: `${particle.y}%`,
+              left: `${particle.x}%`,
+            }}
+            animate={{ y: [0, -24, 0], opacity: [0.2, 0.95, 0.2] }}
+            transition={{
+              duration: particle.duration,
+              delay: particle.delay,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+        ))}
       </div>
-      
-      <div className="container-custom section-padding relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Left Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8"
-          >
-            {/* Icon showcase */}
-            <motion.div
-              className="flex justify-center lg:justify-start mb-6"
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-            >
-              <div className="flex space-x-4">
-                <motion.div
-                  className="p-3 bg-blue-500/20 backdrop-blur-sm rounded-full border border-blue-400/30"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <Code className="w-8 h-8 text-blue-300" />
-                </motion.div>
-                <motion.div
-                  className="p-3 bg-indigo-500/20 backdrop-blur-sm rounded-full border border-indigo-400/30"
-                  whileHover={{ scale: 1.1, rotate: -5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <Palette className="w-8 h-8 text-indigo-300" />
-                </motion.div>
-                <motion.div
-                  className="p-3 bg-cyan-500/20 backdrop-blur-sm rounded-full border border-cyan-400/30"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <Zap className="w-8 h-8 text-cyan-300" />
-                </motion.div>
-                <motion.div
-                  className="p-3 bg-slate-500/20 backdrop-blur-sm rounded-full border border-slate-400/30"
-                  whileHover={{ scale: 1.1, rotate: -5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <Sparkles className="w-8 h-8 text-slate-300" />
-                </motion.div>
-              </div>
-            </motion.div>
 
-            <div className="space-y-4">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight px-2"
-              >
-                Hi, I'm{' '}
-                <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
-                  Subash S
-                </span>
-              </motion.h1>
-              
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-medium px-2"
-              >
-                B.Tech Computer Science Student
-              </motion.p>
-              
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="text-sm sm:text-base md:text-lg text-white/80 px-2"
-              >
-                Full Stack Developer using MERN Stack
-              </motion.p>
-            </div>
-
+      <div className="container-custom relative z-10">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="space-y-8" data-reveal>
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="text-xs sm:text-sm md:text-base lg:text-lg text-white/80 leading-relaxed max-w-lg px-2"
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 rounded-full border border-cyan-300/40 bg-cyan-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200"
             >
-              Computer Science Engineering student with practical experience in full-stack web development, 
-              focusing on the MERN stack. Currently doing an internship at Postulate Info Tech, 
-              contributing to real-world projects.
+              Digital Craftsmanship
             </motion.p>
 
-            {/* Contact Info */}
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="font-['Space_Grotesk'] text-4xl font-bold leading-tight text-slate-50 sm:text-5xl md:text-6xl xl:text-7xl"
+            >
+              Building immersive
+              <br />
+              web products with
+              <span className="text-gradient"> precision.</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="max-w-2xl text-lg leading-relaxed text-slate-300"
+            >
+              I&apos;m <span className="font-semibold text-white">Subash S</span>, a developer focused on fast,
+              modern, and polished full-stack experiences.
+            </motion.p>
+
+            <div className="rounded-2xl border border-white/10 bg-slate-900/50 px-5 py-4 backdrop-blur-xl">
+              <p className="text-sm uppercase tracking-[0.2em] text-slate-400">Current Focus</p>
+              <p className="mt-2 font-['Space_Grotesk'] text-2xl text-cyan-200">
+                {typedText}
+                <span className="animate-pulse text-fuchsia-300">|</span>
+              </p>
+            </div>
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1.0 }}
-              className="space-y-3"
+              transition={{ duration: 0.7, delay: 0.35 }}
+              className="flex flex-col gap-4 sm:flex-row"
             >
-              <div className="flex items-center space-x-3 text-white/90">
-                <Phone className="h-5 w-5 text-yellow-400" />
-                <span>+91-9345081127</span>
-              </div>
-              <div className="flex items-center space-x-3 text-white/90">
-                <Mail className="h-5 w-5 text-pink-400" />
-                <span>subash.93450@gmail.com</span>
-              </div>
-              <div className="flex items-center space-x-3 text-white/90">
-                <MapPin className="h-5 w-5 text-purple-400" />
-                <span>Chennai, India</span>
-              </div>
+              <button
+                type="button"
+                onClick={() => smoothScrollTo('#projects')}
+                className="group inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-300/60 bg-gradient-to-r from-cyan-500/70 to-indigo-500/70 px-7 py-3 font-semibold text-white shadow-xl shadow-cyan-900/40 transition-all hover:scale-[1.02] hover:shadow-cyan-500/30"
+              >
+                Explore Projects
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => smoothScrollTo('#contact')}
+                className="inline-flex items-center justify-center rounded-xl border border-white/25 bg-white/5 px-7 py-3 font-semibold text-slate-100 transition-all hover:border-white/40 hover:bg-white/10"
+              >
+                Let&apos;s Work Together
+              </button>
             </motion.div>
 
-            {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1.2 }}
-              className="flex flex-col sm:flex-row gap-4"
+              transition={{ duration: 0.7, delay: 0.45 }}
+              className="flex flex-wrap items-center gap-3"
             >
-              <motion.button
-                onClick={scrollToAbout}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-full font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center justify-center"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Learn More About Me
-              </motion.button>
-              <motion.a
-                href="#projects"
-                className="border-2 border-blue-400/50 text-white px-8 py-4 rounded-full font-semibold hover:bg-blue-500/20 hover:border-blue-400 transition-all duration-300 backdrop-blur-sm inline-flex items-center justify-center"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                View My Work
-              </motion.a>
-            </motion.div>
-
-            {/* Social Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1.4 }}
-              className="flex flex-wrap gap-3 sm:gap-4"
-            >
-              <motion.a
+              <a
                 href="https://github.com/Subash-S-66"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-blue-500/20 backdrop-blur-sm hover:bg-blue-500/30 text-blue-300 rounded-full transition-all duration-200 border border-blue-400/30"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
+                className="rounded-xl border border-white/10 bg-slate-900/60 p-3 text-slate-200 transition hover:border-cyan-300/60 hover:text-cyan-200"
+                aria-label="GitHub"
               >
-                <Github className="h-6 w-6" />
-              </motion.a>
-              <motion.a
+                <Github className="h-5 w-5" />
+              </a>
+              <a
                 href="https://www.linkedin.com/in/subash-s-514aa9373"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-indigo-500/20 backdrop-blur-sm hover:bg-indigo-500/30 text-indigo-300 rounded-full transition-all duration-200 border border-indigo-400/30"
-                whileHover={{ scale: 1.1, rotate: -5 }}
-                whileTap={{ scale: 0.95 }}
+                className="rounded-xl border border-white/10 bg-slate-900/60 p-3 text-slate-200 transition hover:border-cyan-300/60 hover:text-cyan-200"
+                aria-label="LinkedIn"
               >
-                <Linkedin className="h-6 w-6" />
-              </motion.a>
+                <Linkedin className="h-5 w-5" />
+              </a>
+              <a
+                href="mailto:subash.93450@gmail.com"
+                className="rounded-xl border border-white/10 bg-slate-900/60 p-3 text-slate-200 transition hover:border-cyan-300/60 hover:text-cyan-200"
+                aria-label="Email"
+              >
+                <Mail className="h-5 w-5" />
+              </a>
             </motion.div>
-          </motion.div>
+          </div>
 
-          {/* Right Content - Profile Image Placeholder */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex justify-center lg:justify-end"
+          <motion.aside
+            data-reveal
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.15 }}
+            className="glass-panel relative overflow-hidden p-7 sm:p-8"
           >
+            <div className="absolute -right-14 -top-16 h-36 w-36 rounded-full bg-cyan-400/30 blur-3xl" />
+            <div className="absolute -bottom-14 -left-12 h-40 w-40 rounded-full bg-violet-500/20 blur-3xl" />
+
             <div className="relative">
-              <div className="w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 bg-gradient-to-br from-slate-800 via-blue-800 to-indigo-800 rounded-full flex items-center justify-center shadow-2xl border border-blue-500/20">
-                <div className="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 bg-gradient-to-br from-blue-700 to-indigo-700 rounded-full flex items-center justify-center border border-blue-400/30">
-                  <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-full flex items-center justify-center border border-cyan-400/30">
-                    <span className="text-3xl sm:text-5xl md:text-6xl font-bold text-white">SS</span>
-                  </div>
+              <div className="mb-8 rounded-2xl border border-white/10 bg-slate-950/50 p-6">
+                <div className="mx-auto mb-4 flex h-28 w-28 items-center justify-center rounded-full border border-cyan-300/40 bg-gradient-to-br from-cyan-500/30 to-violet-500/30 neon-ring">
+                  <span className="font-['Space_Grotesk'] text-3xl font-bold text-cyan-100">SS</span>
+                </div>
+                <h2 className="text-center text-2xl font-semibold text-white">Subash S</h2>
+                <p className="mt-2 text-center text-sm uppercase tracking-[0.2em] text-slate-400">Full-Stack Engineer</p>
+              </div>
+
+              <div className="space-y-3 text-sm text-slate-300">
+                <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                  <Phone className="h-4 w-4 text-cyan-300" />
+                  <span>+91-9345081127</span>
+                </div>
+                <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                  <Mail className="h-4 w-4 text-cyan-300" />
+                  <span>subash.93450@gmail.com</span>
+                </div>
+                <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                  <MapPin className="h-4 w-4 text-cyan-300" />
+                  <span>Chennai, India</span>
                 </div>
               </div>
-              {/* Floating elements - Hidden on mobile to prevent overflow */}
-              <div className="hidden sm:block">
-                <motion.div 
-                  className="absolute -top-4 -right-4 w-8 h-8 bg-blue-500/40 rounded-full border border-blue-400/50"
-                animate={{ 
-                  y: [0, -10, 0],
-                  rotate: [0, 180, 360]
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div 
-                className="absolute -bottom-4 -left-4 w-6 h-6 bg-cyan-500/40 rounded-full border border-cyan-400/50"
-                animate={{ 
-                  y: [0, 10, 0],
-                  scale: [1, 1.2, 1]
-                }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div 
-                className="absolute top-1/2 -left-8 w-4 h-4 bg-indigo-500/40 rounded-full border border-indigo-400/50"
-                animate={{ 
-                  x: [0, 10, 0],
-                  rotate: [0, -180, -360]
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              />
-              
-              {/* Additional background bubbles */}
-              <motion.div 
-                className="absolute top-8 -right-12 w-5 h-5 bg-blue-400/30 rounded-full border border-blue-300/40"
-                animate={{ 
-                  y: [0, -8, 0],
-                  x: [0, -5, 0],
-                  scale: [1, 1.1, 1]
-                }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div 
-                className="absolute -top-8 left-8 w-3 h-3 bg-cyan-400/30 rounded-full border border-cyan-300/40"
-                animate={{ 
-                  y: [0, 6, 0],
-                  x: [0, 4, 0],
-                  opacity: [0.6, 1, 0.6]
-                }}
-                transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div 
-                className="absolute bottom-8 -right-8 w-4 h-4 bg-indigo-400/30 rounded-full border border-indigo-300/40"
-                animate={{ 
-                  y: [0, -6, 0],
-                  x: [0, 5, 0],
-                  rotate: [0, 90, 180]
-                }}
-                transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div 
-                className="absolute -bottom-8 right-12 w-3 h-3 bg-slate-400/30 rounded-full border border-slate-300/40"
-                animate={{ 
-                  y: [0, 8, 0],
-                  x: [0, -3, 0],
-                  scale: [1, 0.9, 1]
-                }}
-                transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div 
-                className="absolute top-1/3 -right-16 w-2 h-2 bg-blue-300/40 rounded-full border border-blue-200/50"
-                animate={{ 
-                  x: [0, -8, 0],
-                  y: [0, -4, 0],
-                  opacity: [0.4, 0.8, 0.4]
-                }}
-                transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div 
-                className="absolute bottom-1/3 -left-16 w-2 h-2 bg-cyan-300/40 rounded-full border border-cyan-200/50"
-                animate={{ 
-                  x: [0, 6, 0],
-                  y: [0, 5, 0],
-                  scale: [1, 1.2, 1]
-                }}
-                transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div 
-                className="absolute top-1/4 left-4 w-2 h-2 bg-indigo-300/40 rounded-full border border-indigo-200/50"
-                animate={{ 
-                  x: [0, 8, 0],
-                  y: [0, -6, 0],
-                  rotate: [0, 180, 360]
-                }}
-                transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div 
-                className="absolute bottom-1/4 right-4 w-2 h-2 bg-slate-300/40 rounded-full border border-slate-200/50"
-                animate={{ 
-                  x: [0, -6, 0],
-                  y: [0, 7, 0],
-                  opacity: [0.5, 0.9, 0.5]
-                }}
-                transition={{ duration: 2.9, repeat: Infinity, ease: "easeInOut" }}
-              />
-              </div>
             </div>
-          </motion.div>
+          </motion.aside>
         </div>
-      </div>
 
-      {/* Scroll indicator - Perfectly centered horizontally */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.6 }}
-        className="absolute bottom-1 left-0 right-0 z-20 flex items-center justify-center w-full sm:bottom-8"
-      >
         <motion.button
-          onClick={scrollToAbout}
-          className="group flex flex-col items-center justify-center space-y-1 w-26 h-12 sm:w-30 sm:h-14 bg-white/15 backdrop-blur-md rounded-full border border-white/30 hover:border-white/50 hover:bg-white/25 transition-all duration-300 cursor-pointer px-4 py-3 shadow-lg"
-          whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.95 }}
+          type="button"
+          onClick={() => smoothScrollTo('#about')}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.7 }}
+          className="mx-auto mt-14 flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-2 text-sm text-slate-300 transition hover:border-cyan-300/60 hover:text-cyan-100"
         >
-          <span className="text-xs sm:text-sm font-semibold text-white group-hover:text-white leading-tight text-center">Scroll Down</span>
-          <motion.div
-            animate={{ y: [0, 4, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-          </motion.div>
+          Scroll for More
+          <ArrowDown className="h-4 w-4 animate-bounce" />
         </motion.button>
-      </motion.div>
+      </div>
     </section>
   )
 }
