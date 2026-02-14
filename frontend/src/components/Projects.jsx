@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { ExternalLink, Github, Code, Database, Palette, Zap, Star, Rocket } from 'lucide-react'
+import { ExternalLink, Github, Code, Database, Palette, Zap, Star, Rocket, Download } from 'lucide-react'
 
 // Move data outside component to prevent recreation on every render
 const projects = [
@@ -21,12 +21,13 @@ const projects = [
       icon: Code,
       gradient: 'from-blue-500 to-purple-600',
       accentColor: 'from-cyan-400 to-blue-500',
-      bgPattern: 'from-blue-100 to-purple-100'
+      bgPattern: 'from-blue-100 to-purple-100',
+      liveDemo: 'https://stage.boltandbrook.com/'
     },
     {
       id: 2,
       title: 'SERVIFY - FREELANCE BIDDING PLATFORM',
-      role: 'FRONT-END DEVELOPER',
+      role: 'Full Stack',
       date: '2024-2025',
       description: 'Developed a real-time freelance bidding platform enabling clients to post projects and freelancers to place competitive bids.',
       features: [
@@ -59,7 +60,58 @@ const projects = [
       gradient: 'from-orange-500 to-red-600',
       accentColor: 'from-yellow-400 to-orange-500',
       bgPattern: 'from-orange-100 to-red-100',
-      liveDemo: 'https://subash-s-66.github.io/expense-tracking-system/'
+      liveDemo: 'https://subash-s-66.github.io/expense-tracking-system/',
+      apkDownloads: [
+        {
+          label: 'Expense Tracker',
+          fileName: 'Expense Tracker.apk',
+          url: '/apk/Expense%20Tracker.apk'
+        }
+      ]
+    },
+    {
+      id: 4,
+      title: 'FAIRSHARE',
+      role: 'FULL-STACK DEVELOPER (WEB + MOBILE)',
+      date: '2025-2026',
+      description: 'Built a full-stack debt management app to track shared expenses, direct lending, and settlements across web and mobile platforms.',
+      features: [
+        'Implemented JWT-based authentication with registration, login, and password reset flows',
+        'Developed split-bill and direct-lend workflows with partial payments, settlement tracking, and friend-wise debt summaries',
+        'Added automated email reminders with configurable frequency, notification time, and timezone support'
+      ],
+      techStack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Node.js', 'Express.js', 'MongoDB', 'JWT', 'Capacitor'],
+      category: 'Full Stack',
+      icon: Database,
+      gradient: 'from-indigo-500 to-cyan-600',
+      accentColor: 'from-sky-400 to-indigo-500',
+      bgPattern: 'from-indigo-100 to-cyan-100',
+      liveDemo: 'https://subash-s-66.github.io/FairSplit/',
+      apkDownloads: [
+        {
+          label: 'Fair Split',
+          fileName: 'Fair Split.apk',
+          url: '/apk/Fair%20Split.apk'
+        }
+      ]
+    },
+    {
+      id: 5,
+      title: 'REAL-TIME INDIAN SIGN LANGUAGE TO TEXT TRANSLATOR',
+      role: 'AI/ML + FULL-STACK DEVELOPER',
+      date: '2025-2026',
+      description: 'Built a real-time AI system that translates Indian Sign Language gestures from webcam video into text using a temporal deep learning pipeline.',
+      features: [
+        'Implemented live video streaming from React to FastAPI using WebSocket for low-latency inference',
+        'Extracted hand and pose landmarks with MediaPipe, created sliding windows, and ran ONNX LSTM inference with confidence stabilization',
+        'Designed end-to-end training and deployment flow with CISLR preprocessing, PyTorch training, and ONNX Runtime serving'
+      ],
+      techStack: ['React', 'Tailwind CSS', 'FastAPI', 'WebSocket', 'MediaPipe', 'PyTorch', 'LSTM', 'ONNX', 'ONNX Runtime'],
+      category: 'Full Stack',
+      icon: Zap,
+      gradient: 'from-fuchsia-500 to-rose-600',
+      accentColor: 'from-pink-400 to-fuchsia-500',
+      bgPattern: 'from-fuchsia-100 to-rose-100'
     }
   ]
 
@@ -80,6 +132,27 @@ const Projects = () => {
       default:
         return Code
     }
+  }
+
+  const handleApkDownload = (apkDownloads) => {
+    if (!apkDownloads?.length) return
+
+    const appList = apkDownloads.map((apk) => `- ${apk.label}`).join('\n')
+    const titleText = apkDownloads.length > 1 ? 'Download Android apps?' : 'Download Android app?'
+    const shouldDownload = window.confirm(
+      `${titleText}\n\n${appList}`
+    )
+
+    if (!shouldDownload) return
+
+    apkDownloads.forEach((apk) => {
+      const link = document.createElement('a')
+      link.href = apk.url
+      link.download = apk.fileName
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+    })
   }
 
   return (
@@ -223,7 +296,7 @@ const Projects = () => {
                     />
                   </motion.div>
                   
-                  <div className="mt-4 flex space-x-3">
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {project.liveDemo ? (
                       <motion.a
                         href={project.liveDemo}
@@ -256,6 +329,22 @@ const Projects = () => {
                       <Github className="h-4 w-4" />
                       <span>Code</span>
                     </motion.a>
+                    {project.apkDownloads?.length ? (
+                      <motion.button
+                        type="button"
+                        onClick={() => handleApkDownload(project.apkDownloads)}
+                        className={`sm:col-span-2 bg-gradient-to-r ${project.gradient} text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 shadow-lg`}
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Download className="h-4 w-4" />
+                        <span>
+                          {project.apkDownloads.length === 1
+                            ? `Download ${project.apkDownloads[0].label} APK`
+                            : 'Download Android Apps'}
+                        </span>
+                      </motion.button>
+                    ) : null}
                   </div>
                 </div>
               </div>

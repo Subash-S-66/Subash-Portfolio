@@ -476,6 +476,9 @@ app.use((err, req, res, next) => {
 app.use(express.static(path.join(__dirname, 'dist')))
 // Also serve the same build when the app is hosted under a subpath (Zeabur uses /projects)
 app.use('/projects', express.static(path.join(__dirname, 'dist')))
+// Serve Android APK files from the root-level "Android app" folder
+app.use('/apk', express.static(path.join(__dirname, '..', 'Android app')))
+app.use('/projects/apk', express.static(path.join(__dirname, '..', 'Android app')))
 
 // Catch all handler: send back React's index.html file for client-side routing
 app.get('*', (req, res) => {
