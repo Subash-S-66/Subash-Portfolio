@@ -11,8 +11,8 @@ const navItems = [
 ]
 
 const portfolioLinks = [
-  { name: 'Neural Network Theme', url: 'http://subash-dev-portfolio.zeabur.app/' },
-  { name: 'Cosmic Universe Theme', url: 'http://subash-s-portfolio.zeabur.app/' },
+  { name: 'Cosmic AI Theme', url: 'http://subash-dev-portfolio.zeabur.app/' },
+  { name: 'Neural Network Theme', url: 'http://subash-s-portfolio.zeabur.app/' },
   { name: 'Game Theme', url: 'http://subash--portfolio.zeabur.app/' },
 ]
 
@@ -135,7 +135,12 @@ const Navbar = () => {
             </div>
 
             <div className="hidden items-center gap-2 md:flex">
-              <div className="relative" ref={portfolioMenuRef}>
+              <div
+                className="relative"
+                ref={portfolioMenuRef}
+                onMouseEnter={() => setIsPortfolioMenuOpen(true)}
+                onMouseLeave={() => setIsPortfolioMenuOpen(false)}
+              >
                 <button
                   type="button"
                   onClick={() => setIsPortfolioMenuOpen((prev) => !prev)}
