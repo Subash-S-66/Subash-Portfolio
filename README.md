@@ -4,7 +4,7 @@
 This is my personal portfolio website showcasing my full-stack development skills and projects.
 
 ## 🌐 Live Demo
-Visit the live portfolio: [https://subash.zeabur.app](https://subash.zeabur.app)
+Visit the live portfolio: [https://subash-portfolio.zeabur.app/](https://subash-portfolio.zeabur.app/)
 
 ## 👨‍💻 About Me
 
@@ -20,14 +20,15 @@ I'm a passionate B.Tech Computer Science student with 1+ years of hands-on exper
 ## 🛠️ Tech Stack
 - **Frontend**: React, Vite, Tailwind CSS, Framer Motion
 - **Backend**: Node.js, Express.js
-- **Deployment**: GitHub Pages
+- **Deployment**: Zeabur (Frontend + Backend)
 
 ## 📁 Repository Structure
 ```
 ├── frontend/          # React frontend application
 ├── backend/           # Express.js backend server
-├── assets/            # Built assets for GitHub Pages
-└── index.html         # Main HTML file for GitHub Pages
+├── Android app/       # APK files for mobile projects
+├── Dockerfile         # Multi-stage Docker build
+└── render.yaml        # Optional Render deployment config
 ```
 
 ## 🔒 Repository Policy
