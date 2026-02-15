@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Menu, X, Sparkles, ArrowUpRight } from 'lucide-react'
+import { Menu, X, Sparkles, ArrowUpRight, Globe } from 'lucide-react'
 
 const navItems = [
   { name: 'Home', href: '#home' },
@@ -10,10 +10,18 @@ const navItems = [
   { name: 'Contact', href: '#contact' },
 ]
 
+const portfolioLinks = [
+  { name: 'Neural Network Theme', url: 'http://subash-dev-portfolio.zeabur.app/' },
+  { name: 'Cosmic Universe Theme', url: 'http://subash-s-portfolio.zeabur.app/' },
+  { name: 'Game Theme', url: 'http://subash--portfolio.zeabur.app/' },
+]
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isPortfolioMenuOpen, setIsPortfolioMenuOpen] = useState(false)
+  const portfolioMenuRef = useRef(null)
 
   const scrollToSection = (href) => {
     const target = document.querySelector(href)
@@ -61,6 +69,18 @@ const Navbar = () => {
       window.removeEventListener('scroll', updateNavbarState)
       window.removeEventListener('resize', updateNavbarState)
     }
+  }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!portfolioMenuRef.current) return
+      if (!portfolioMenuRef.current.contains(event.target)) {
+        setIsPortfolioMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   return (
@@ -114,7 +134,43 @@ const Navbar = () => {
               })}
             </div>
 
-            <div className="hidden md:block">
+            <div className="hidden items-center gap-2 md:flex">
+              <div className="relative" ref={portfolioMenuRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsPortfolioMenuOpen((prev) => !prev)}
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-100 transition hover:bg-white/10"
+                >
+                  <Globe className="h-4 w-4" />
+                  Portfolios
+                </button>
+
+                <AnimatePresence>
+                  {isPortfolioMenuOpen ? (
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2, ease: 'easeOut' }}
+                      className="absolute right-0 mt-2 w-60 rounded-xl border border-white/15 bg-slate-900/95 p-2 shadow-2xl backdrop-blur-xl"
+                    >
+                      {portfolioLinks.map((portfolio) => (
+                        <a
+                          key={portfolio.url}
+                          href={portfolio.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-slate-200 transition hover:bg-white/10 hover:text-white"
+                        >
+                          {portfolio.name}
+                          <ArrowUpRight className="h-4 w-4" />
+                        </a>
+                      ))}
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
+              </div>
+
               <a
                 href="https://github.com/Subash-S-66/Resume-link/blob/main/Subash%20S%20Resume.pdf"
                 target="_blank"
@@ -174,6 +230,19 @@ const Navbar = () => {
                     Resume
                     <ArrowUpRight className="h-4 w-4" />
                   </a>
+
+                  {portfolioLinks.map((portfolio) => (
+                    <a
+                      key={portfolio.url}
+                      href={portfolio.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex w-full items-center justify-between rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-slate-200 transition hover:bg-white/10 hover:text-white"
+                    >
+                      {portfolio.name}
+                      <ArrowUpRight className="h-4 w-4" />
+                    </a>
+                  ))}
                 </div>
               </motion.div>
             ) : null}
