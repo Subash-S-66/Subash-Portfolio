@@ -14,6 +14,7 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
+
 // Always log port information for debugging
 console.log(`🔧 Environment PORT: ${process.env.PORT}`)
 console.log(`🔧 Using PORT: ${PORT}`)
